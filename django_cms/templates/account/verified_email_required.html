@@ -3,22 +3,16 @@
 {% load i18n %}
 
 {% block head_title %}
-  {% translate "Verify Your E-mail Address" %}
+  Verificación de dirección de correo electrónico
 {% endblock head_title %}
 {% block inner %}
-  <h1>{% translate "Verify Your E-mail Address" %}</h1>
+  <h1>Verificación de dirección de correo electrónico</h1>
   {% url 'account_email' as email_url %}
   <p>
-    {% blocktranslate %}This part of the site requires us to verify that
-you are who you claim to be. For this purpose, we require that you
-verify ownership of your e-mail address. {% endblocktranslate %}
+    Esta parte del sitio requiere que verifiquemos que eres es quien dices ser. 
+    Para ello, necesitamos que verifiques la titularidad de tu dirección de correo electrónico.
   </p>
   <p>
-    {% blocktranslate %}We have sent an e-mail to you for
-verification. Please click on the link inside this e-mail. Please
-contact us if you do not receive it within a few minutes.{% endblocktranslate %}
-  </p>
-  <p>
-    {% blocktranslate %}<strong>Note:</strong> you can still <a href="{{ email_url }}">change your e-mail address</a>.{% endblocktranslate %}
+    <strong>Nota:</strong> aún puedes <a href="{{ email_url }}">cambiar tu dirección de correo electrónico</a>.
   </p>
 {% endblock inner %}
