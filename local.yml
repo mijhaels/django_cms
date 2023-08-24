@@ -31,6 +31,8 @@ services:
     volumes:
       - django_cms_local_postgres_data:/var/lib/postgresql/data
       - django_cms_local_postgres_data_backups:/backups
+    ports:
+      - '5432:5432'
     env_file:
       - ./.envs/.local/.postgres
 
