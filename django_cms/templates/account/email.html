@@ -5,12 +5,12 @@
 {% load crispy_forms_tags %}
 
 {% block head_title %}
-  {% translate "Account" %}
+  Cuenta
 {% endblock head_title %}
 {% block inner %}
-  <h1>{% translate "E-mail Addresses" %}</h1>
+  <h1>Dirrección de correo electrónico</h1>
   {% if user.emailaddress_set.all %}
-    <p>{% translate "The following e-mail addresses are associated with your account:" %}</p>
+    <p>La siguiente direccion de correo electronico esta asociado a su cuenta.</p>
     <form action="{% url 'account_email' %}" class="email_list" method="post">
       {% csrf_token %}
       <fieldset class="blockLabels">
@@ -25,12 +25,12 @@
                      value="{{ emailaddress.email }}" />
               {{ emailaddress.email }}
               {% if emailaddress.verified %}
-                <span class="verified">{% translate "Verified" %}</span>
+                <span class="verified">Verificado.</span>
               {% else %}
-                <span class="unverified">{% translate "Unverified" %}</span>
+                <span class="unverified">Sin verificar.</span>
               {% endif %}
               {% if emailaddress.primary %}
-                <span class="primary">{% translate "Primary" %}</span>
+                <span class="primary">Principal</span>
               {% endif %}
             </label>
           </div>
@@ -38,33 +38,33 @@
         <div class="form-group">
           <button class="secondaryAction btn btn-primary"
                   type="submit"
-                  name="action_primary">{% translate "Make Primary" %}</button>
+                  name="action_primary">Hacer lo princial</button>
           <button class="secondaryAction btn btn-primary"
                   type="submit"
-                  name="action_send">{% translate "Re-send Verification" %}</button>
+                  name="action_send">Reenviar Verificacion</button>
           <button class="primaryAction btn btn-primary"
                   type="submit"
-                  name="action_remove">{% translate "Remove" %}</button>
+                  name="action_remove">Eliminar</button>
         </div>
       </fieldset>
     </form>
   {% else %}
     <p>
-      <strong>{% translate "Warning:" %}</strong> {% translate "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc." %}
+      <strong>Advertencia</strong> Actualmente no tienes ninguna dirección de correo electrónico configurada. Realmente deberías agregar una dirección de correo electrónico para poder recibir notificaciones, restablecer tu contraseña, etc.
     </p>
   {% endif %}
-  <h2>{% translate "Add E-mail Address" %}</h2>
+  <h2>Agregar dirección de correo electrónico</h2>
   <form method="post" action="{% url 'account_email' %}" class="add_email">
     {% csrf_token %}
     {{ form|crispy }}
-    <button class="btn btn-primary" name="action_add" type="submit">{% translate "Add E-mail" %}</button>
+    <button class="btn btn-primary" name="action_add" type="submit">Agregar correo electrónico</button>
   </form>
 {% endblock inner %}
 {% block inline_javascript %}
   {{ block.super }}
   <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', function() {
-      const message = "{% translate 'Do you really want to remove the selected e-mail address?' %}";
+      const message = ""¿Realmente desea eliminar la dirección de correo electrónico seleccionada?";";
       const actions = document.getElementsByName('action_remove');
       if (actions.length) {
         actions[0].addEventListener("click", function(e) {

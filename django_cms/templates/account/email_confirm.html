@@ -4,10 +4,10 @@
 {% load account %}
 
 {% block head_title %}
-  {% translate "Confirm E-mail Address" %}
+  Confirmar la dirección de correo electrónico
 {% endblock head_title %}
 {% block inner %}
-  <h1>{% translate "Confirm E-mail Address" %}</h1>
+  <h1> Confirmar la direccion de correo electrónico</h1>
   {% if confirmation %}
     {% user_display confirmation.email_address.user as user_display %}
     <p>
@@ -16,7 +16,7 @@
     <form method="post"
           action="{% url 'account_confirm_email' confirmation.key %}">
       {% csrf_token %}
-      <button class="btn btn-primary" type="submit">{% translate "Confirm" %}</button>
+      <button class="btn btn-primary" type="submit">Confirmar</button>
     </form>
   {% else %}
     {% url 'account_email' as email_url %}
