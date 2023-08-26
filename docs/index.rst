@@ -3,21 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to django-cms's documentation!
+Bienvenido a la documentación de django-cms
 ======================================================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 3
+   :caption: Contenidos:
 
-   howto
-   users
+   guia
+   usuarios
+   roles
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
