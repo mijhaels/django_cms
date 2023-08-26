@@ -1,7 +1,7 @@
 from allauth.account.forms import SignupForm
-from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django.contrib.auth import forms as admin_forms
 from django.contrib.auth import get_user_model
+from django.forms import ChoiceField, DateField, DateInput, CharField
 
 User = get_user_model()
 
@@ -31,10 +31,10 @@ class UserSignupForm(SignupForm):
     Check UserSocialSignupForm for accounts created from social.
     """
 
-
-class UserSocialSignupForm(SocialSignupForm):
-    """
-    Renders the form when user has signed up using social accounts.
-    Default fields will be added automatically.
-    See UserSignupForm otherwise.
-    """
+    name = CharField(label="Nombre completo", required=False)
+    sex = ChoiceField(
+        choices=(("", "Selecciona el sexo"), ("M", "Masculino"), ("F", "Femenino"), ("O", "Otro")),
+        label="Sexo",
+        required=False,
+    )
+    birth_date = DateField(label="Fecha de nacimiento", required=False, widget=DateInput(attrs={"type": "date"}))
