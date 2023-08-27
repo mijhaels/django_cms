@@ -63,7 +63,6 @@ THIRD_PARTY_APPS = [
     "crispy_bootstrap5",
     "allauth",
     "allauth.account",
-    "modeltranslation",
 ]
 
 LOCAL_APPS = [
