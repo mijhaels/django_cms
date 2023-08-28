@@ -10,7 +10,7 @@
 {% block inner %}
   <h1>Dirrección de correo electrónico</h1>
   {% if user.emailaddress_set.all %}
-    <p>La siguiente direccion de correo electronico esta asociado a su cuenta.</p>
+    <p>La siguiente dirección de correo electrónico esta asociado a su cuenta.</p>
     <form action="{% url 'account_email' %}" class="email_list" method="post">
       {% csrf_token %}
       <fieldset class="blockLabels">
@@ -36,15 +36,19 @@
           </div>
         {% endfor %}
         <div class="form-group">
+        {% if perms.account.add_emailconfirmation %}
           <button class="secondaryAction btn btn-primary"
                   type="submit"
                   name="action_primary">Establecerlo como correo principal</button>
+        {% endif %}
           <button class="secondaryAction btn btn-primary"
                   type="submit"
                   name="action_send">Reenviar verificación</button>
+          {% if perms.account.delete_emailconfirmation %}
           <button class="primaryAction btn btn-primary"
                   type="submit"
                   name="action_remove">Eliminar</button>
+          {% endif %}
         </div>
       </fieldset>
     </form>
@@ -53,12 +57,14 @@
       <strong>Advertencia</strong> Actualmente no tienes ninguna dirección de correo electrónico configurada. Realmente deberías agregar una dirección de correo electrónico para poder recibir notificaciones, restablecer tu contraseña, etc.
     </p>
   {% endif %}
+  {% if perms.account.add_emailaddress %}
   <h2>Agregar dirección de correo electrónico</h2>
   <form method="post" action="{% url 'account_email' %}" class="add_email">
     {% csrf_token %}
     {{ form|crispy }}
     <button class="btn btn-primary" name="action_add" type="submit">Agregar correo electrónico</button>
   </form>
+  {% endif %}
 {% endblock inner %}
 {% block inline_javascript %}
   {{ block.super }}
