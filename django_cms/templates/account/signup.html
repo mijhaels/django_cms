@@ -9,7 +9,7 @@
 {% block inner %}
   <h1>Registrarse</h1>
   <p>
-    {% blocktranslate %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktranslate %}
+    ¿Ya tienes una cuenta? Por favor <a href="{{ login_url }}">inicia sesión</a>.
   </p>
   <form class="signup"
         id="signup_form"
@@ -22,6 +22,6 @@
              name="{{ redirect_field_name }}"
              value="{{ redirect_field_value }}" />
     {% endif %}
-    <button class="btn btn-primary" type="submit">Registrarse »</button>
+    <button class="btn btn-primary" type="submit">Registrarse</button>
   </form>
 {% endblock inner %}

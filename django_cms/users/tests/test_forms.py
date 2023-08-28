@@ -8,19 +8,19 @@ from django_cms.users.models import User
 
 class TestUserAdminCreationForm:
     """
-    Test class for all tests related to the UserAdminCreationForm
+    Clase de prueba para todas las pruebas relacionadas con UserAdminCreationForm
     """
 
     def test_username_validation_error_msg(self, user: User):
         """
-        Tests UserAdminCreation Form's unique validator functions correctly by testing:
-            1) A new user with an existing username cannot be added.
-            2) Only 1 error is raised by the UserCreation Form
-            3) The desired error message is raised
+        Comprueba que el validador único del formulario UserAdminCreation funciona correctamente:
+            1) No se puede añadir un nuevo usuario con un nombre de usuario existente.
+            2) El formulario UserCreation sólo genera un error.
+            3) Se muestra el mensaje de error deseado
         """
 
-        # The user already exists,
-        # hence cannot be created.
+        # El usuario ya existe,
+        # por lo que no se puede crear.
         form = UserAdminCreationForm(
             {
                 "username": user.username,

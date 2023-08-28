@@ -6,13 +6,13 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
+    path("", TemplateView.as_view(template_name="pages/inicio.html"), name="inicio"),
+    path("acerca/", TemplateView.as_view(template_name="pages/acerca.html"), name="acerca"),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("users/", include("django_cms.users.urls", namespace="users")),
-    path("accounts/", include("allauth.urls")),
+    path("cuentas/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
