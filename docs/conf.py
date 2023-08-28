@@ -26,7 +26,7 @@ django.setup()
 
 # -- Project information -----------------------------------------------------
 
-project = "django-cms"
+project = "contentflow"
 copyright = """2023, Iván Cáceres Dahiana Dávalos Lucero Estigarribia Mijhael Samaniego"""
 author = "Iván Cáceres Dahiana Dávalos Lucero Estigarribia Mijhael Samaniego"
 

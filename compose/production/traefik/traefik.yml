@@ -19,7 +19,7 @@ certificatesResolvers:
   letsencrypt:
     # https://docs.traefik.io/master/https/acme/#lets-encrypt
     acme:
-      email: 'iván-cáceres-dahiana-dávalos-lucero-estigarribia-mijhael-samaniego@example.com'
+      email: 'mijhael-samaniego@contentflow.click'
       storage: /etc/traefik/acme/acme.json
       # https://docs.traefik.io/master/https/acme/#httpchallenge
       httpChallenge:
@@ -28,7 +28,7 @@ certificatesResolvers:
 http:
   routers:
     web-secure-router:
-      rule: 'Host(`example.com`) || Host(`www.example.com`)'
+      rule: 'Host(`contentflow.click`) || Host(`www.contentflow.click`)'
       entryPoints:
         - web-secure
       middlewares:

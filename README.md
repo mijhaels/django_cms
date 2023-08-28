@@ -1,4 +1,4 @@
-# django-cms
+# contentflow
 
 Sistema de Gestión de Contenidos
 
