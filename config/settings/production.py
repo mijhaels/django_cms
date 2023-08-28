@@ -115,9 +115,6 @@ INSTALLED_APPS += ["anymail"]  # noqa: F405
 # https://anymail.readthedocs.io/en/stable/esps/amazon_ses/
 EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
 ANYMAIL = {
-    "AMAZON_SES_CLIENT_PARAMS": {
-        "region_name": "sa-east-1",
-    },
 }
 
 # Collectfast
