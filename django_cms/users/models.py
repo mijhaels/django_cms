@@ -5,7 +5,7 @@ from django.urls import reverse
 
 class User(AbstractUser):
     """
-    Default custom user model for django-cms.
+    Default custom user model for contentflow.
     If adding fields that need to be filled at user signup,
     check forms.SignupForm and forms.SocialSignupForms accordingly.
     """
