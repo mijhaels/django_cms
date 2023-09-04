@@ -2,6 +2,7 @@ from allauth.account.forms import SignupForm
 from django.contrib.auth import forms as admin_forms
 from django.contrib.auth import get_user_model
 from django.forms import ChoiceField, DateField, DateInput, CharField
+from django.contrib.auth.models import Group
 
 User = get_user_model()
 
@@ -38,3 +39,15 @@ class UserSignupForm(SignupForm):
         required=False,
     )
     birth_date = DateField(label="Fecha de nacimiento", required=False, widget=DateInput(attrs={"type": "date"}))
+
+    def save(self, request):
+        user = super(UserSignupForm, self).save(request)
+        # Asignar grupo
+        group = Group.objects.get(name="Suscriptor")
+        user.groups.add(group)
+        # Asignar campos personalizados
+        user.name = self.cleaned_data["name"]
+        user.sex = self.cleaned_data["sex"]
+        user.birth_date = self.cleaned_data["birth_date"]
+        user.save()
+        return user
