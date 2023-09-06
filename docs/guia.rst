@@ -38,6 +38,7 @@ Ejecución de comandos de administración de Django
 Como con cualquier comando shell que deseemos ejecutar en nuestro contenedor, esto se hace utilizando el comando **docker-compose -f local.yml run --rm**:
  .. code-block:: python
 
+   $ docker compose -f local.yml run --rm django python manage.py makemigrations
    $ docker compose -f local.yml run --rm django python manage.py migrate
    $ docker compose -f local.yml run --rm django python manage.py createsuperuser
 
