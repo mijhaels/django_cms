@@ -4,13 +4,13 @@ from django_cms.users.views import (
     user_detail_view,
     user_redirect_view,
     user_update_view,
-    user_deactivate_view,
+    user_delete_view,
 )
 
 app_name = "users"
 urlpatterns = [
     path("~redigirir/", view=user_redirect_view, name="redirect"),
     path("~actualizar/", view=user_update_view, name="update"),
+    path("~desactivar/", view=user_delete_view, name="delete"),
     path("<str:username>/", view=user_detail_view, name="detail"),
-    path("~desactivar/", view=user_deactivate_view, name="deactivate_account"),
 ]

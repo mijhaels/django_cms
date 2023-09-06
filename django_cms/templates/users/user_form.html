@@ -24,9 +24,9 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <form action="{% url 'users:deactivate_account'%}" method="post">
+        <form action="{% url 'users:delete' %}" method="post">
           {% csrf_token %}
-          <button type="submit" class="btn btn-danger">Eliminar cuenta</button>
+          <input type="submit" value="Eliminar cuenta" class="btn btn-danger">
         </form>
       </div>
     </div>

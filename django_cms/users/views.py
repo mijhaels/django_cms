@@ -2,22 +2,20 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse
-from django.views.generic import DetailView, RedirectView, UpdateView, DeleteView
+from django.views.generic import DetailView, RedirectView, UpdateView, View
+from django.shortcuts import redirect
 
 User = get_user_model()
 
 
-class UserDeactivateView(LoginRequiredMixin, DeleteView):
-    model = User
-    slug_field = "username"
-    slug_url_kwarg = "username"
-    success_url = "/"
-
-    def get_object(self):
-        return self.request.user
+class UserDeactivateView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        user.deactivate()
+        return redirect("/")
 
 
-user_deactivate_view = UserDeactivateView.as_view()
+user_delete_view = UserDeactivateView.as_view()
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
