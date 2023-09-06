@@ -14,7 +14,7 @@ Obligatorio. 150 caracteres o menos. Se permite cualquier carácter. Ejemplo: 'S
 
 **permisos**
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Campo many-to-many a Permisos:
+Campo many-to-many a :ref:`Permisos <Permisos>`:
 
 .. code-block::
 
@@ -22,3 +22,7 @@ Campo many-to-many a Permisos:
    group.permissions.add(permission, permission, ...)
    group.permissions.remove(permission, permission, ...)
    group.permissions.clear()
+
+.. 
+   :members:
+   :noindex:

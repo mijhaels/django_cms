@@ -43,11 +43,6 @@ Como con cualquier comando shell que deseemos ejecutar en nuestro contenedor, es
 
 Aquí, **Django** es el servicio de destino contra el que estamos ejecutando los comandos. Además, ten en cuenta que **docker exec** no funciona para ejecutar comandos de gestión.
 
-
-
-
-
-
 .. 
    :members:
    :noindex:
