@@ -8,12 +8,12 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/inicio.html"), name="inicio"),
     path("acerca/", TemplateView.as_view(template_name="pages/acerca.html"), name="acerca"),
-    # Django Admin, use {% url 'admin:index' %}
+    # Django Admin, usar {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
-    # User management
+    # Gestión de usuarios
     path("usuarios/", include("django_cms.users.urls", namespace="users")),
     path("cuentas/", include("allauth.urls")),
-    # Your stuff: custom urls includes go here
+    path("tinymce/", include("tinymce.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
