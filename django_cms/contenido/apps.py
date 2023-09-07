@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class ContenidoConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "contenido"
+    name = "django_cms.contenido"
