@@ -7,10 +7,11 @@ Bienvenido a la documentación de contentflow
 ======================================================================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
    :caption: Contenidos:
 
    guia
    usuarios
    roles
+   permisos
 
