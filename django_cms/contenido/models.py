@@ -2,7 +2,6 @@ from django.db import models
 from tinymce.models import HTMLField
 from django_cms.users.models import User
 
-
 class Contenido(models.Model):
     titulo = models.CharField(max_length=255, blank=False, null=False, verbose_name="Título")
     contenido = HTMLField(blank=False, null=False, verbose_name="Descripción del contenido")
@@ -31,3 +30,5 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.titulo
+
+
