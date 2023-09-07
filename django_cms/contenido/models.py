@@ -19,10 +19,16 @@ class Contenido(models.Model):
     estado = models.IntegerField(choices=estados, default=1)
     autor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='autor')
     categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE, related_name='categoria')
+
+    def __str__(self):
+        return self.titulo
     
 class Categoria(models.Model):
     titulo = models.CharField(max_length=255, blank=False, null=False, verbose_name="Título")
     alias = models.CharField(max_length=255, blank=False, null=False, verbose_name="Alias")
     esModerada = models.BooleanField(default=False, verbose_name="¿Es moderada?")
+
+    def __str__(self):
+        return self.titulo
 
 
