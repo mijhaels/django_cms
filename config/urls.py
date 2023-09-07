@@ -4,9 +4,10 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
+from django_cms.contenido.views import ContenidoView
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/inicio.html"), name="inicio"),
+    path("", ContenidoView.as_view() , name="inicio"),
     path("acerca/", TemplateView.as_view(template_name="pages/acerca.html"), name="acerca"),
     # Django Admin, usar {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
