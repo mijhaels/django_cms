@@ -1,3 +1,44 @@
 {% extends "base.html" %}
+{% block content %}
 
 
+{% for contenido in page_obj %}
+    <div class="card" style="margin: 50px auto;">
+        <div class="card-header">
+            {{ contenido.titulo }}
+        </div>
+        <div class="card-body">
+            <div class="col-md-12">
+                <h4>{{ contenido.contenido|safe }}</h4>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+        
+        {% if page_obj.number > 1 %}
+            <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+            </li>
+        {% endif %}
+        
+        {% for i in page_obj.paginator.page_range %}
+            <li class="page-item{% if page_obj.number == i %} active{% endif %}">
+            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            </li>
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+            <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+        {% endif %}
+        
+        </ul>
+    </nav>
+    
+
+{% endblock content %}
