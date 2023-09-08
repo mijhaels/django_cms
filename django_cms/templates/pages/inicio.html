@@ -3,13 +3,13 @@
 
 
 {% for contenido in page_obj %}
-    <div class="card" style="margin: 50px auto;">
-        <div class="card-header">
+    <div class="card" style="margin: 50px auto; color: black; background-color:#e2e2e2;">
+        <div class="card-header text-center" style ="background-color:#7d7575; color:white;font-weight: bold;"> 
             {{ contenido.titulo }}
         </div>
         <div class="card-body">
             <div class="col-md-12">
-                <h4>{{ contenido.contenido|safe }}</h4>
+                <h6>{{ contenido.contenido|safe }}</h6>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
         
         {% if page_obj.number > 1 %}
             <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Anterior</a>
             </li>
         {% endif %}
         
@@ -33,7 +33,7 @@
         
         {% if page_obj.has_next %}
             <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
             </li>
         {% endif %}
         
