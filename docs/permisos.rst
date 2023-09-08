@@ -2,23 +2,20 @@
 
 Permisos
 ======================================================================
-**Campos**
-----------------------------------------------------------------------
-Los objetos de **Permisos** tienen los siguientes campos:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-class **models.Permission**
+.. class:: models.Permission
 
-**nombre**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Requerido. 255 caracteres o menos. Ejemplo: 'Puede eliminar usuarios'
+    .. attribute:: nombre
 
-**tipo_contenido**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Requerido. Una referencia a la tabla de base de datos django_content_type, que contiene un registro para cada modelo instalado.
+        Requerido. 255 caracteres o menos. Ejemplo: 'Puede eliminar usuarios'
 
-**codigo**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Requerido. 100 caracteres o menos. Ejemplo: 'eliminar_usuario'
+    .. attribute:: tipo_contenido
+
+        Requerido. Una referencia a la tabla de base de datos django_content_type, que contiene un registro para cada modelo instalado.
+      
+    .. attribute:: codigo
+
+      Requerido. 100 caracteres o menos. Ejemplo: 'eliminar_usuario'
+    
 
 .. 
    :members:

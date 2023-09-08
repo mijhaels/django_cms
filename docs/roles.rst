@@ -2,26 +2,22 @@
 
 Roles
 ======================================================================
-**Campos**
-----------------------------------------------------------------------
-Los objetos de **Roles** tienen los siguientes campos:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-class **models.Group**
+.. class:: models.Group
 
-**nombre**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Obligatorio. 150 caracteres o menos. Se permite cualquier carácter. Ejemplo: 'Super Usuarios'
+    .. attribute:: nombre
 
-**permisos**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Campo many-to-many a :ref:`Permisos <Permisos>`:
+        Obligatorio. 150 caracteres o menos. Se permite cualquier carácter. Ejemplo: 'Super Usuarios'
 
-.. code-block::
+    .. attribute:: permisos
 
-   group.permissions.set([permission_list])
-   group.permissions.add(permission, permission, ...)
-   group.permissions.remove(permission, permission, ...)
-   group.permissions.clear()
+         Campo many-to-many a :ref:`Permisos <Permisos>`:
+
+         .. code-block::
+
+            group.permissions.set([permission_list])
+            group.permissions.add(permission, permission, ...)
+            group.permissions.remove(permission, permission, ...)         
+            group.permissions.clear()
 
 .. 
    :members:
