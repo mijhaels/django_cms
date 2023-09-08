@@ -4,15 +4,15 @@ from django_cms.users.models import User
 
 
 def test_detail(user: User):
-    assert reverse("users:detail", kwargs={"username": user.username}) == f"/users/{user.username}/"
-    assert resolve(f"/users/{user.username}/").view_name == "users:detail"
+    assert reverse("usuarios:detail", kwargs={"username": user.username}) == f"/usuarios/{user.username}/"
+    assert resolve(f"/usuarios/{user.username}/").view_name == "usuarios:detail"
 
 
 def test_update():
-    assert reverse("users:update") == "/users/~update/"
-    assert resolve("/users/~update/").view_name == "users:update"
+    assert reverse("usuarios:update") == "/usuarios/~update/"
+    assert resolve("/usuarios/~update/").view_name == "usuarios:update"
 
 
 def test_redirect():
-    assert reverse("users:redirect") == "/users/~redirect/"
-    assert resolve("/users/~redirect/").view_name == "users:redirect"
+    assert reverse("usuarios:redirect") == "/usuarios/~redirect/"
+    assert resolve("/usuarios/~redirect/").view_name == "usuarios:redirect"
