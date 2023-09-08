@@ -55,5 +55,5 @@ INSTALLED_APPS += ["django_extensions"]  # noqa: F405
 # Your stuff...
 # ------------------------------------------------------------------------------
 
-RUNSERVERPLUS_POLLER_RELOADER_TYPE = 'stat'
-RUNSERVERPLUS_SERVER_ADDRESS_PORT = '0.0.0.0:8000'
+RUNSERVERPLUS_POLLER_RELOADER_TYPE = "stat"
+RUNSERVERPLUS_SERVER_ADDRESS_PORT = "0.0.0.0:8000"

@@ -3,29 +3,49 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-
-
   {{ user.username }}
-
-
 {% endblock title %}
 {% block content %}
-  <h1>
-  
-  
-    {{ user.username }}
-  
-  
-</h1>
-<form class="form-horizontal"
-      method="post"
-      action="{% url 'users:update' %}">
-  {% csrf_token %}
-  {{ form|crispy }}
-  <div class="control-group">
-    <div class="controls">
-      <button type="submit" class="btn btn-primary">Actualizar</button>
+  <div class="modal fade"
+       id="confirmDeleteModal"
+       tabindex="-1"
+       role="dialog"
+       aria-labelledby="confirmDeleteModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+          <button type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">¿Estás seguro de que quieres eliminar tu cuenta?</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <form action="{% url 'users:delete' %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Eliminar cuenta" class="btn btn-danger" />
+          </form>
+        </div>
+      </div>
     </div>
   </div>
-</form>
+  <h1>{{ user.username }}</h1>
+  <form class="form-horizontal"
+        method="post"
+        action="{% url 'users:update' %}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+        <button type="button"
+                class="btn btn-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#confirmDeleteModal">Eliminar cuenta</button>
+      </div>
+    </div>
+  </form>
 {% endblock content %}

@@ -5,12 +5,9 @@ from django.urls import reverse
 
 class User(AbstractUser):
     """
-    Default custom user model for contentflow.
-    If adding fields that need to be filled at user signup,
-    check forms.SignupForm and forms.SocialSignupForms accordingly.
+    Usuario personalizado para contentflow.
     """
 
-    # First and last name do not cover name patterns around the globe
     name = CharField("Nombre completo", blank=True, max_length=255)
     sex = CharField("Sexo", blank=True, max_length=1, choices=(("M", "Masculino"), ("F", "Femenino"), ("O", "Otro")))
     birth_date = DateField("Fecha de nacimiento", blank=True, null=True)
@@ -19,10 +16,14 @@ class User(AbstractUser):
     last_name = None  # type: ignore
 
     def get_absolute_url(self) -> str:
-        """Get URL for user's detail view.
+        """Obtener URL para el detalle del usuario.
 
-        Returns:
-            str: URL for user detail.
-
+        Retorna:
+            str: URL para el detalle del usuario.
         """
         return reverse("users:detail", kwargs={"username": self.username})
+
+    def deactivate(self) -> None:
+        """Desactivar usuario."""
+        self.is_active = False
+        self.save()
