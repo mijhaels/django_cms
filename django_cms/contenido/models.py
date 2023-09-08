@@ -35,4 +35,3 @@ class Categoria(models.Model):
         return self.titulo
 
 
-

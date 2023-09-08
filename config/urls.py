@@ -4,10 +4,10 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
-from tinymce import views as tinymce_views
+from django_cms.contenido.views import ContenidoView
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/inicio.html"), name="inicio"),
+    path("", ContenidoView.as_view() , name="inicio"),
     path("acerca/", TemplateView.as_view(template_name="pages/acerca.html"), name="acerca"),
     # Django Admin, usar {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
@@ -15,8 +15,6 @@ urlpatterns = [
     path("usuarios/", include("django_cms.users.urls", namespace="users")),
     path("cuentas/", include("allauth.urls")),
     path("tinymce/", include("tinymce.urls")),
-    path('tinymce-linklist/', tinymce_views.render_to_link_list, name='tinymce-linklist'),
-    path('tinymce-image-list/', tinymce_views.render_to_image_list, name='tinymce-image-list'),
     path("contenido/", include("django_cms.contenido.urls", namespace="contenido")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

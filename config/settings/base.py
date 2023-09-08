@@ -57,7 +57,6 @@ DJANGO_APPS = [
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
-    "django.contrib.flatpages",
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
@@ -262,5 +261,15 @@ ACCOUNT_ADAPTER = "django_cms.users.adapters.AccountAdapter"
 ACCOUNT_FORMS = {"signup": "django_cms.users.forms.UserSignupForm"}
 
 
-# Your stuff...
-# ------------------------------------------------------------------------------
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "height": 500,
+    "menubar": True,
+    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
+    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
+    "code,help,wordcount",
+    "toolbar": "undo redo | formatselect | "
+    "bold italic backcolor | alignleft aligncenter "
+    "alignright alignjustify | bullist numlist outdent indent | "
+    "removeformat | help",
+}

@@ -14,4 +14,6 @@ Bienvenido a la documentación de contentflow
    usuarios
    roles
    permisos
+   categorias
+   contenido
 
