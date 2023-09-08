@@ -1,11 +1,6 @@
 from django.urls import path
 
-from django_cms.users.views import (
-    user_detail_view,
-    user_redirect_view,
-    user_update_view,
-    user_delete_view,
-)
+from django_cms.users.views import user_delete_view, user_detail_view, user_redirect_view, user_update_view
 
 app_name = "users"
 urlpatterns = [

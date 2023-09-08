@@ -1,4 +1,3 @@
-
 {% extends "account/base.html" %}
 
 {% load i18n %}
@@ -29,25 +28,23 @@
               {% else %}
                 <span class="unverified">Sin verificar.</span>
               {% endif %}
-              {% if emailaddress.primary %}
-                <span class="primary">Principal.</span>
-              {% endif %}
+              {% if emailaddress.primary %}<span class="primary">Principal.</span>{% endif %}
             </label>
           </div>
         {% endfor %}
         <div class="form-group">
-        {% if perms.account.add_emailconfirmation %}
-          <button class="secondaryAction btn btn-primary"
-                  type="submit"
-                  name="action_primary">Establecerlo como correo principal</button>
-        {% endif %}
+          {% if perms.account.add_emailconfirmation %}
+            <button class="secondaryAction btn btn-primary"
+                    type="submit"
+                    name="action_primary">Establecerlo como correo principal</button>
+          {% endif %}
           <button class="secondaryAction btn btn-primary"
                   type="submit"
                   name="action_send">Reenviar verificación</button>
           {% if perms.account.delete_emailconfirmation %}
-          <button class="primaryAction btn btn-primary"
-                  type="submit"
-                  name="action_remove">Eliminar</button>
+            <button class="primaryAction btn btn-primary"
+                    type="submit"
+                    name="action_remove">Eliminar</button>
           {% endif %}
         </div>
       </fieldset>
@@ -58,12 +55,12 @@
     </p>
   {% endif %}
   {% if perms.account.add_emailaddress %}
-  <h2>Agregar dirección de correo electrónico</h2>
-  <form method="post" action="{% url 'account_email' %}" class="add_email">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button class="btn btn-primary" name="action_add" type="submit">Agregar correo electrónico</button>
-  </form>
+    <h2>Agregar dirección de correo electrónico</h2>
+    <form method="post" action="{% url 'account_email' %}" class="add_email">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button class="btn btn-primary" name="action_add" type="submit">Agregar correo electrónico</button>
+    </form>
   {% endif %}
 {% endblock inner %}
 {% block inline_javascript %}

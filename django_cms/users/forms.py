@@ -1,8 +1,8 @@
 from allauth.account.forms import SignupForm
 from django.contrib.auth import forms as admin_forms
 from django.contrib.auth import get_user_model
-from django.forms import ChoiceField, DateField, DateInput, CharField
 from django.contrib.auth.models import Group
+from django.forms import CharField, ChoiceField, DateField, DateInput
 
 User = get_user_model()
 

@@ -9,10 +9,10 @@
 {% block inner %}
   <h1>Iniciar sesión</h1>
   {% if ACCOUNT_ALLOW_REGISTRATION %}
-      <p>
-        Si aún no ha creado una cuenta, por favor
-        <a href="{{ signup_url }}">regístrese</a> primero.
-      </p>
+    <p>
+      Si aún no ha creado una cuenta, por favor
+      <a href="{{ signup_url }}">regístrese</a> primero.
+    </p>
   {% endif %}
   <form class="login" method="post" action="{% url 'account_login' %}">
     {% csrf_token %}
