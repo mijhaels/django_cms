@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if request.user.is_authenticated %}
   {% for contenido in page_obj %}
     <div class="card"
          style="margin: 50px auto;
