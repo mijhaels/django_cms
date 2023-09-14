@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from simple_history.models import HistoricalRecords
 from tinymce.models import HTMLField
@@ -10,6 +11,7 @@ class Contenido(models.Model):
     contenido = HTMLField(blank=False, null=False, verbose_name="Descripción del contenido")
     fechaCreacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     fechaVencimiento = models.DateTimeField(verbose_name="Fecha de vencimiento", blank=True, null=True)
+    activo = models.BooleanField(default=True, verbose_name="¿Está activo?")
     esPublico = models.BooleanField(default=True, verbose_name="¿Es público?")
     estados = [
         (1, "Borrador"),
@@ -17,7 +19,6 @@ class Contenido(models.Model):
         (3, "A publicar"),
         (4, "Publicado"),
         (5, "Rechazado"),
-        (6, "Inactivo"),
     ]
     estado = models.IntegerField(choices=estados, default=1)
     autor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="autor")
@@ -37,8 +38,19 @@ class Categoria(models.Model):
         verbose_name="Alias",
         help_text="Ejemplo: 'Ingeniería de Software II' -> 'is2'",
     )
+    activo = models.BooleanField(default=True, verbose_name="¿Está activo?")
     esModerada = models.BooleanField(default=False, verbose_name="¿Es moderada?")
     historial = HistoricalRecords()
+
+    def save(self, *args, **kwargs):
+        if not self.activo:  # Si la categoría está inactiva
+            contenidos_activos = Contenido.objects.filter(categoria=self, activo=True)
+            if contenidos_activos.exists():
+                raise ValidationError(
+                    "No se puede desactivar una categoría que tenga contenidos activos.",
+                    code="categoria_con_contenidos_activos",
+                )
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.titulo
