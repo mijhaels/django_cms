@@ -1,10 +1,11 @@
 from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
 
 from .models import Categoria, Contenido
 
 
 @admin.register(Contenido)
-class ContenidoAdmin(admin.ModelAdmin):
+class ContenidoAdmin(SimpleHistoryAdmin):
     list_display = (
         "titulo",
         "fechaCreacion",
@@ -63,7 +64,7 @@ class ContenidoAdmin(admin.ModelAdmin):
 
 
 @admin.register(Categoria)
-class CategoriaAdmin(admin.ModelAdmin):
+class CategoriaAdmin(SimpleHistoryAdmin):
     list_display = ("titulo", "alias", "activo", "esModerada")
     list_filter = ("titulo", "alias", "activo", "esModerada")
     search_fields = ("titulo", "alias", "activo", "esModerada")
