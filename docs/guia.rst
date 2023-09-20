@@ -10,9 +10,9 @@ Antes de empezar
 ----------------------------------------------------------------------
 Clonar el repositorio
 
-.. code-block:: python
+ .. code-block:: python
 
-   git clone https://github.com/Andythem23/django_cms.git
+    $ git clone https://github.com/Andythem23/django_cms.git
 
 Creación de Stack
 ----------------------------------------------------------------------
@@ -20,7 +20,7 @@ Esto puede tardar un poco, especialmente la primera vez que ejecute este comando
 
 Abra un terminal en la raíz del proyecto y ejecute lo siguiente para el desarrollo local:
 
-.. code-block:: python
+ .. code-block:: python
 
    $ docker-compose -f local.yml build
 
