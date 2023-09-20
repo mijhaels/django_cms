@@ -24,6 +24,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
 TIME_ZONE = "America/Asuncion"
+USE_TZ = False
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
