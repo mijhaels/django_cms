@@ -1,41 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% for contenido in page_obj %}
-    <div class=" card bg-light text-dark my-5 ">
-      <div class=" card-header text-center bg-primary text-white  "
-        font-weight: bold">{{ contenido.titulo }}
-      </div>
-      <div class="card-body">
-        <div class="col-md-12">
-          <h6>{{ contenido.contenido|safe|truncatechars:100 }}</h6>
-          <p>Autor: {{ contenido.autor }}</p>
-          <p>{{ contenido.fechaCreacion }}</p>
-          <p>Categoría: {{ contenido.categoria }}</p>
-          <a href="{% url 'contenido:contenido_detalle' contenido.id %}">Ver más</a>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            {% if page_obj %}
+            {% for contenido in page_obj %}
+            <div class="card mb-3 bg-light text-dark">
+                <div class="row g-0">
+                    <div class="card-header text-center bg-primary text-white border-success">
+                        {{ contenido.titulo }}
+                    </div>
+                    <div class="card-body">
+                        <p>{{ contenido.contenido|safe|truncatechars:200 }}</p>
+                        <div class="mt-auto text-end">
+                            <a href="{% url 'contenido:contenido_detalle' contenido.id %}" class="btn btn-primary">Ver
+                                más</a>
+                        </div>
+                    </div>
+                    <div class="card-footer text-body-secondary bg-light text-dark text-end">
+                        <p><a href="{% url 'contenido:contenido_busqueda' %}?categoria={{ contenido.categoria.titulo }}">{{ contenido.categoria.titulo }}</a></p>
+                        <p><a href="{% url 'contenido:contenido_busqueda' %}?autor={{ contenido.autor.username }}">{{ contenido.autor.username }}</a></p>
+                        <p>Publicado el {{ contenido.fechaCreacion }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>No hay resultados.</p>
+            {% endif %}
         </div>
-      </div>
     </div>
-  {% endfor %}
-  <nav aria-label="Page navigation example">
+</div>
+
+<nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-      {% if page_obj.number > 1 %}
-        <li class="page-item ">
-          <a class=" page-link "
-             href="?page={{ page_obj.previous_page_number }}"
-             tabindex="-1">Anterior</a>
+        {% if page_obj.number > 1 %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Anterior</a>
         </li>
-      {% endif %}
-      {% for i in page_obj.paginator.page_range %}
-        <li class=" page-item{% if page_obj.number == i %} active{% endif %}">
-          <a class=" page-link" href="?page={{ i }}">{{ i }}</a>
+        {% endif %}
+        {% for i in page_obj.paginator.page_range %}
+        <li class="page-item{% if page_obj.number == i %} active{% endif %}">
+            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
         </li>
-      {% endfor %}
-      {% if page_obj.has_next %}
-        <li class=" page-item">
-          <a class=" page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
         </li>
-      {% endif %}
+        {% endif %}
     </ul>
-  </nav>
+</nav>
 {% endblock content %}
