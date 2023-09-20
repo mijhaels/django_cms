@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-
 {% block content %}
 <div class="container mt-5">
     <div class="row">
@@ -8,9 +7,9 @@
             {% if page_obj %}
             {% for contenido in page_obj %}
             <a href="{% url 'contenido:contenido_detalle' contenido.id %}">
-                <div class="card mb-3 bg-light text-dark card-link">
+                <div class="card mb-3 bg-light text-dark">
                     <div class="row g-0">
-                        <div class="card-header text-center bg-primary text-white border-success">
+                        <div class="card-header text-center bg-primary text-white border-success card-link">
                             {{ contenido.titulo }}
                         </div></a>
                         <div class="card-body">
