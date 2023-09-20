@@ -32,4 +32,4 @@ class TestUserAdminCreationForm:
         assert not form.is_valid()
         assert len(form.errors) == 1
         assert "username" in form.errors
-        assert form.errors["username"][0] == ""
+        assert form.errors["username"][0] == "Este usuario ya existe"
