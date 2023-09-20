@@ -44,6 +44,35 @@ Como con cualquier comando shell que deseemos ejecutar en nuestro contenedor, es
 
 Aquí, **Django** es el servicio de destino contra el que estamos ejecutando los comandos. Además, ten en cuenta que **docker exec** no funciona para ejecutar comandos de gestión.
 
+Ejecución de comandos de calidad de codigo:
+----------------------------------------------------------------------
+A continuación se demuestran los comandos a ser utilizados para optimizar la calidad de código
+
+Se utiliza para formatear todos los archivos .py
+ .. code-block:: python
+
+   $ docker compose -f local.yml run --rm django black .
+
+Se utiliza para linting de los archivos .py
+ .. code-block:: python
+   
+   $ docker compose -f local.yml run --rm django flake8 
+
+Se utiliza para para ordenar los imports
+ .. code-block:: python
+   
+   $ docker compose -f local.yml run --rm django isort .
+
+Se utiliza para hacer linting de los archivos .html
+ .. code-block:: python
+      
+   $ docker compose -f local.yml run --rm django djlint . --lint 
+   
+Se utiliza para formatear todos los archivos .html
+ .. code-block:: python
+   
+   $ docker compose -f local.yml run --rm django djlint . --format
+
 .. 
    :members:
    :noindex:
