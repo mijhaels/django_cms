@@ -88,11 +88,9 @@
               {% endif %}
             </ul>
             {% if request.user.is_staff %}
-              
-                  <a id="admin-cms"
-                     class="nav-link btn btn-primary text-white p-1 ms-auto "
-                     href="{% url 'admin:index' %}">Panel de Administración</a>
-
+              <a id="admin-cms"
+                 class="nav-link btn btn-primary text-white p-1 ms-auto "
+                 href="{% url 'admin:index' %}">Panel de Administración</a>
             {% endif %}
           </div>
         </div>
