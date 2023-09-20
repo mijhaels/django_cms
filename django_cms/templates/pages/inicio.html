@@ -8,7 +8,11 @@
       </div>
       <div class="card-body">
         <div class="col-md-12">
-          <h6>{{ contenido.contenido|safe }}</h6>
+          <h6>{{ contenido.contenido|safe|truncatechars:100 }}</h6>
+          <p>Autor: {{ contenido.autor }}</p>
+          <p>{{ contenido.fechaCreacion }}</p>
+          <p>Categoría: {{ contenido.categoria }}</p>
+          <a href="{% url 'contenido:contenido_detalle' contenido.id %}">Ver más</a>
         </div>
       </div>
     </div>

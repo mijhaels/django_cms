@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="card"
+       style="margin: 50px auto;
+              color: black;
+              background-color:#e2e2e2">
+    <div class="card-header text-center"
+         style="background-color:#7d7575;
+                color:white;
+                font-weight: bold">{{ contenido.titulo }}</div>
+    <div class="card-body">
+      <div class="col-md-12">
+        <h6>{{ contenido.contenido|safe }}</h6>
+        <p>Autor: {{ contenido.autor }}</p>
+        <p>{{ contenido.fechaCreacion }}</p>
+        <p>Categoría: {{ contenido.categoria }}</p>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

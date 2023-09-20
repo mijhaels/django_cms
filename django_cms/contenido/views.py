@@ -14,3 +14,9 @@ class ContenidoView(View):
         page_obj = paginator.get_page(page_number)
 
         return render(request, "pages/inicio.html", {"page_obj": page_obj})
+
+
+class ContenidoDetalleView(View):
+    def get(self, request, contenido_id):
+        contenido = Contenido.objects.get(id=contenido_id)
+        return render(request, "pages/contenido_detalle.html", {"contenido": contenido})

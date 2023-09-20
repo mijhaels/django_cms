@@ -1,3 +1,9 @@
+from django.urls import path
+
+from .views import ContenidoDetalleView, ContenidoView
+
 app_name = "contenido"  # Define el app_name aquí
 
-urlpatterns = []
+urlpatterns = [
+    path("<int:contenido_id>/", ContenidoDetalleView.as_view(), name="contenido_detalle"),
+]
