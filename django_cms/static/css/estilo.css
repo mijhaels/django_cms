@@ -1,15 +1,4 @@
-.btn-with-border {
-    background-color: #f5f5f5; 
-    border: 1px solid #ccc;
-    border-radius: 5px; 
-    padding: 7px 13px; 
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    transition: color 0.3s;
-}
 
-.btn-custom-style:hover {
-    color: #999; 
-}
 
 .agrupar { /* div */
     width: 1300px;
