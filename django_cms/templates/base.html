@@ -88,13 +88,11 @@
               {% endif %}
             </ul>
             {% if request.user.is_staff %}
-              <ul class="navbar-nav" style="margin-left: auto;">
-                <li class="nav-item">
+              
                   <a id="admin-cms"
-                     class="nav-link btn btn-with-border"
+                     class="nav-link btn btn-primary text-white p-1 ms-auto "
                      href="{% url 'admin:index' %}">Panel de Administración</a>
-                </li>
-              </ul>
+
             {% endif %}
           </div>
         </div>
