@@ -1,0 +1,7 @@
+<h2>Categorías</h2>
+<div class="list-group">
+    {% for categoria in categorias %}
+    <a href="{% url 'contenido:contenido_busqueda' %}?categoria={{ categoria.titulo }}"
+        class="list-group-item list-group-item-action">{{ categoria.titulo }}</a>
+    {% endfor %}
+</div>
