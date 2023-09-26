@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.admin.views.main import ChangeList
+from django.db.models import Count
 from simple_history.admin import SimpleHistoryAdmin
 
 from .models import Categoria, Contenido
@@ -29,6 +31,16 @@ class ContenidoAdmin(SimpleHistoryAdmin):
     )
     readonly_fields = ("fechaCreacion",)
     actions = ("activar_contenidos", "desactivar_contenidos", "hacer_publicos_contenidos", "hacer_privados_contenidos")
+
+    def changelist_view(self, request, extra_context=None):
+        # Crea un diccionario donde cada estado es una clave y los contenidos son los valores
+        kanban_board_elements = {
+            nombre_estado: Contenido.objects.filter(estado=estado) for estado, nombre_estado in Contenido.estados
+        }
+        # Añade el diccionario al contexto
+        extra_context = extra_context or {}
+        extra_context["kanban_board_elements"] = kanban_board_elements
+        return super().changelist_view(request, extra_context=extra_context)
 
     @admin.action(description="Activar contenido/s seleccionado/s")
     def activar_contenidos(self, request, queryset):
