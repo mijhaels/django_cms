@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ContenidoBusquedaView, ContenidoDetalleView, ContenidoView
+from .views import ContenidoBusquedaView, ContenidoDetalleView
 
 app_name = "contenido"  # Define el app_name aquí
 

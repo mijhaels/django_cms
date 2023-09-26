@@ -71,7 +71,7 @@ Se utiliza para hacer linting de los archivos .html
 Se utiliza para formatear todos los archivos .html
  .. code-block:: python
    
-   $ docker compose -f local.yml run --rm django djlint . --format
+   $ docker compose -f local.yml run --rm django djlint . --reformat
 
 .. 
    :members:

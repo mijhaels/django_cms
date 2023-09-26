@@ -1,23 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
+  <div class="container mt-5">
     <div class="col-md-8">
-        <div class="card mb-3 bg-light ">
-            <div class="row g-0">
-                <div class="card-header text-center bg-primary text-white border-success ">
-                    {{ contenido.titulo }}
-                </div>
-                <div class="card-body text-black ">
-                    <p>{{ contenido.contenido|safe}}</p>
-                </div>
-                <div class="card-footer text-body-secondary bg-light  text-end">
-                    <p>{{ contenido.categoria }}</p>
-                    <p>{{ contenido.autor }}</p>
-                    <p>Publicado el {{ contenido.fechaCreacion }}</p>
-                </div>
-            </div>
+      <div class="card mb-3 bg-light ">
+        <div class="row g-0">
+          <div class="card-header text-center bg-primary text-white border-success ">{{ contenido.titulo }}</div>
+          <div class="card-body text-black ">
+            <p>{{ contenido.contenido|safe }}</p>
+          </div>
+          <div class="card-footer text-body-secondary bg-light  text-end">
+            <p>{{ contenido.categoria }}</p>
+            <p>{{ contenido.autor }}</p>
+            <p>Publicado el {{ contenido.fechaCreacion }}</p>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 {% endblock content %}

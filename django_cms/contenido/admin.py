@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django.contrib.admin.views.main import ChangeList
-from django.db.models import Count
 from simple_history.admin import SimpleHistoryAdmin
 
 from .models import Categoria, Contenido

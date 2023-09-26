@@ -1,5 +1,7 @@
 {% extends "admin/change_list.html" %}
+
 {% load i18n admin_urls %}
+
 {% block result_list %}
   <section class="kanban-board text-gray-700 body-font">
     {% csrf_token %}
@@ -19,9 +21,7 @@
                   <div class="kanban-board-element border border-gray-300 rounded-lg mb-2">
                     <div class="flex flex-col sm:flex-row sm:items-center items-start mx-auto">
                       <div class="p-2 flex-grow">
-                        <a href="{% url 'admin:contenido_contenido_change' contenido.id %}">
-                          {{ contenido.titulo }}
-                        </a>
+                        <a href="{% url 'admin:contenido_contenido_change' contenido.id %}">{{ contenido.titulo }}</a>
                       </div>
                     </div>
                   </div>
@@ -33,4 +33,4 @@
       </div>
     </div>
   </section>
-{% endblock %}
+{% endblock result_list %}
