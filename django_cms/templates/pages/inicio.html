@@ -11,23 +11,28 @@
                     <div class="row g-0">
                         <div class="card-header text-center bg-primary text-white border-success card-link">
                             {{ contenido.titulo }}
-                        </div></a>
-                        <div class="card-body">
-                            <p>{{ contenido.contenido|safe|truncatechars:200 }}</p>
                         </div>
-                        <div class="card-footer text-body-secondary bg-light text-dark text-end">
-                            <p><a href="{% url 'contenido:contenido_busqueda' %}?categoria={{ contenido.categoria.titulo }}">{{contenido.categoria.titulo }}</a></p>
-                            <p><a href="{% url 'contenido:contenido_busqueda' %}?autor={{ contenido.autor.username }}">{{contenido.autor.username }}</a></p>
-                            <p>Publicado el {{ contenido.fechaCreacion }}</p>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-            {% else %}
-            <p>No hay resultados.</p>
-            {% endif %}
+            </a>
+            <div class="card-body">
+                <p>{{ contenido.contenido|safe|truncatechars:200 }}</p>
+            </div>
+            <div class="card-footer text-body-secondary bg-light text-dark text-end">
+                <p><a href="{% url 'contenido:contenido_busqueda' %}?categoria={{ contenido.categoria.titulo }}">
+                    {{contenido.categoria.titulo}}</a></p>
+                <p><a href="{% url 'contenido:contenido_busqueda' %}?autor={{ contenido.autor.username }}">
+                    {{contenido.autor.username}}</a></p>
+                <p>Publicado el {{ contenido.fechaCreacion }}</p>
+            </div>
         </div>
     </div>
+    {% endfor %}
+    {% else %}
+    <p>No hay resultados.</p>
+    {% endif %}
+</div>
+
+<div class="col-md-4">
+    {% include "pages/categorias.html" %}
 </div>
 
 <nav aria-label="Page navigation example">

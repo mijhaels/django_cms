@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
 
-from .models import Contenido
+from .models import Contenido, Categoria
 
 
 class ContenidoView(View):
@@ -13,8 +13,9 @@ class ContenidoView(View):
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
 
-        return render(request, "pages/inicio.html", {"page_obj": page_obj})
+        categorias = Categoria.objects.all()
 
+        return render(request, "pages/inicio.html", {"page_obj": page_obj, "categorias": categorias})
 
 class ContenidoDetalleView(View):
     def get(self, request, contenido_id):
@@ -52,3 +53,4 @@ class ContenidoBusquedaView(View):
         page_obj = paginator.get_page(page_number)
 
         return render(request, "pages/busqueda_resultados.html", {"page_obj": page_obj})
+
