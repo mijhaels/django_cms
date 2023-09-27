@@ -7,7 +7,8 @@
         <h2>Resultados de la búsqueda:</h2>
         {% if page_obj %}
           {% for contenido in page_obj %}
-            <a class="link-light" href="{% url 'contenido:contenido_detalle' contenido.id %}">
+            <a class="link-light"
+               href="{% url 'contenido:contenido_detalle' contenido.id %}">
               <div class="card mb-3 bg-light">
                 <div class="row g-0">
                   <div class="card-header text-center bg-primary border-success card-link">{{ contenido.titulo }}</div>
