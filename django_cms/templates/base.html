@@ -39,7 +39,7 @@
   </head>
   <body>
     <div class="mb-1">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
+      <nav class="navbar navbar-expand-md navbar-light bg-secondary">
         <div class="container-fluid">
           <button class="navbar-toggler navbar-toggler-right"
                   type="button"
@@ -50,40 +50,53 @@
                   aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'inicio' %}">contentflow</a>
+          <a class="navbar-brand text-white" href="{% url 'inicio' %}">contentflow</a>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item active">
-                <a class="nav-link" href="{% url 'inicio' %}">Inicio <span class="visually-hidden">(current)</span></a>
+                <a class="nav-link text-white" href="{% url 'inicio' %}">Inicio <span class="visually-hidden">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'acerca' %}">Acerca de</a>
+                <a class="nav-link text-white" href="{% url 'acerca' %}">Acerca de</a>
               </li>
               {% if request.user.is_authenticated %}
                 <li class="nav-item">
-                  <a class="nav-link"
+                  <a class="nav-link text-white"
                      href="{% url 'users:detail' request.user.username %}">Mi perfil</a>
                 </li>
                 <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" href="{% url 'account_logout' %}">Cerrar sesión</a>
+                  <a class="nav-link text-white" href="{% url 'account_logout' %}">Cerrar sesión</a>
                 </li>
               {% else %}
                 {% if ACCOUNT_ALLOW_REGISTRATION %}
                   <li class="nav-item">
                     {# URL provided by django-allauth/account/urls.py #}
-                    <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">Registrarse</a>
+                    <a id="sign-up-link "
+                       class="nav-link text-white"
+                       href="{% url 'account_signup' %}">Registrarse</a>
                   </li>
                 {% endif %}
                 <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
-                  <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">Iniciar sesión</a>
+                  <a id="log-in-link "
+                     class="nav-link text-white"
+                     href="{% url 'account_login' %}">Iniciar sesión</a>
                 </li>
               {% endif %}
             </ul>
+            <div class="d-flex align-items-center mx-auto">
+              <form class="navbar d-flex" role="search">
+                <input class="form-control me-2"
+                       type="search"
+                       placeholder="Buscar"
+                       aria-label="Search" />
+              </form>
+              <button class="btn btn-outline-light" type="submit">Buscar</button>
+            </div>
             {% if request.user.is_staff %}
               <a id="admin-cms"
-                 class="nav-link btn btn-primary text-white p-1 ms-auto "
+                 class="nav-link btn btn-secondary text-white p-1 ms-auto "
                  href="{% url 'admin:index' %}">Panel de Administración</a>
             {% endif %}
           </div>
