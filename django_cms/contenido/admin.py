@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from simple_history.admin import SimpleHistoryAdmin
 
 from .models import Categoria, Contenido
@@ -17,16 +19,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         "categoria",
     )
     list_filter = ("fechaCreacion", "fechaVencimiento", "activo", "esPublico", "estado", "autor", "categoria")
-    search_fields = (
-        "titulo",
-        "fechaCreacion",
-        "fechaVencimiento",
-        "activo",
-        "esPublico",
-        "estado",
-        "autor",
-        "categoria",
-    )
+    search_fields = ("titulo",)
     readonly_fields = ("fechaCreacion",)
     actions = ("activar_contenidos", "desactivar_contenidos", "hacer_publicos_contenidos", "hacer_privados_contenidos")
 
@@ -39,6 +32,48 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         extra_context = extra_context or {}
         extra_context["kanban_board_elements"] = kanban_board_elements
         return super().changelist_view(request, extra_context=extra_context)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj and obj.estado == 1:
+            if request.user.groups.filter(name="Autor").exists():
+                return ("fechaCreacion", "esPublico", "estado", "autor")
+        if obj and obj.estado == 2:
+            if request.user.groups.filter(name="Autor").exists():
+                return (
+                    "titulo",
+                    "contenido",
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "activo",
+                    "esPublico",
+                    "estado",
+                    "autor",
+                    "categoria",
+                )
+        return self.readonly_fields
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["show_button_autor"] = False
+        contenido = Contenido.objects.get(pk=object_id)
+        if (
+            request.user.groups.filter(name="Autor").exists() and contenido.estado == 1
+        ):  # Si el usuario pertenece al grupo 'Autor' y el contenido está en estado 1
+            extra_context["show_button_autor"] = True
+        return super().change_view(
+            request,
+            object_id,
+            form_url,
+            extra_context=extra_context,
+        )
+
+    def response_change(self, request, obj):
+        if "_revisar" in request.POST:  # Si se hizo clic en el botón 'Enviar'
+            obj.estado = 2  # Cambia el estado a 2
+            obj.save()  # Guarda el objeto
+            self.message_user(request, "El contenido ha sido enviado.")  # Muestra un mensaje al usuario
+            return redirect("admin:contenido_contenido_changelist")  # Redirige al usuario a la vista de lista
+        return super().response_change(request, obj)
 
     @admin.action(description="Activar contenido/s seleccionado/s")
     def activar_contenidos(self, request, queryset):
