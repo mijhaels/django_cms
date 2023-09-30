@@ -10,7 +10,7 @@
                href="{% url 'contenido:contenido_detalle' contenido.id %}">
               <div class="card mb-3 bg-light text-dark">
                 <div class="row g-0">
-                  <div class="card-header text-center bg-primary card-link">{{ contenido.titulo }}</div>
+                  <div class="card-header text-center card-link">{{ contenido.titulo }}</div>
                 </a>
                 <div class="card-body">
                   <p>{{ contenido.contenido|safe|truncatechars:200 }}</p>

@@ -1,99 +1,99 @@
 {% extends "admin/change_list.html" %}
+
 {% load i18n admin_urls %}
 
 {% block result_list %}
-<style>
-.states-container {
-    display: flex;
-}
+  <style>
+    .states-container {
+      display: flex;
+    }
 
-.state {
-    flex: 1;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    background-color: #f8f8f8;
-}
+    .state {
+      flex: 1;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      background-color: #f8f8f8;
+    }
 
-.state-card {
-    background-color: #fff;
-    box-shadow: 1px 2px 4px rgba(0,0,0,.1);
-    border: 1px solid #e5e5e5;
-    border-radius: 3px;
-    padding: 10px;
-    margin: 15px 13px;
-}
+    .state-card {
+      background-color: #fff;
+      box-shadow: 1px 2px 4px rgba(0, 0, 0, .1);
+      border: 1px solid #e5e5e5;
+      border-radius: 3px;
+      padding: 10px;
+      margin: 15px 13px;
+    }
 
-.state-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    .state-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-.state-name {
-    margin-right: 10px;
-}
+    .state-name {
+      margin-right: 10px;
+    }
 
-.state-count {
-    font-size: 12px;
-    font-weight: 500;
-    color: #fff;
-}
+    .state-count {
+      font-size: 12px;
+      font-weight: 500;
+      color: #fff;
+    }
 
-.state-card-categoria p {
-    font-size: 12px;
-    text-align: center;
-    color: #fff;
-    background-color: #417690;
-    border: #417690;
-    border-radius: 5px;
-    padding: 1px;
-    margin-right: 70px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
+    .state-card-categoria p {
+      font-size: 12px;
+      text-align: center;
+      color: #fff;
+      background-color: #417690;
+      border: #417690;
+      border-radius: 5px;
+      padding: 1px;
+      margin-right: 70px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
 
-.state-card-autor p {
-    font-size: 12px;
-    text-align: left;
-    color: #838383;
-    margin-left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding: 0;
-}
+    .state-card-autor p {
+      font-size: 12px;
+      text-align: left;
+      color: #838383;
+      margin-left: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 0;
+    }
 
-.state-card a {
-    font-weight: 500;
-}
-</style>
-
-<section>
+    .state-card a {
+      font-weight: 500;
+    }
+  </style>
+  <section>
     {% csrf_token %}
     <h1>Tablero Kanban</h1>
     <div class="states-container">
-        {% for estado, contenidos in kanban_board_elements.items %}
+      {% for estado, contenidos in kanban_board_elements.items %}
         <div class="state">
-            <h2>
-                <span class="state-title">
-                    <span class="state-name">{{ estado }}</span>
-                    <span class="state-count">{{ contenidos|length }}</span>
-                </span>
-            </h2> 
-            {% for contenido in contenidos %}
+          <h2>
+            <span class="state-title">
+              <span class="state-name">{{ estado }}</span>
+              <span class="state-count">{{ contenidos|length }}</span>
+            </span>
+          </h2>
+          {% for contenido in contenidos %}
             <div class="state-card">
-                <a href="{% url 'admin:contenido_contenido_change' contenido.id %}">
-                    {{ contenido.titulo }}
-                </a>
-                <span>
-                    <span class="state-card-categoria">
-                        <p>{{contenido.categoria}}</p></span>
-                    <span class="state-card-autor">
-                        <p>{{contenido.autor}}</p></span>
+              <a href="{% url 'admin:contenido_contenido_change' contenido.id %}">{{ contenido.titulo }}</a>
+              <span>
+                <span class="state-card-categoria">
+                  <p>{{ contenido.categoria }}</p>
                 </span>
+                <span class="state-card-autor">
+                  <p>{{ contenido.autor }}</p>
+                </span>
+              </span>
             </div>
-            {% endfor %}
+          {% endfor %}
         </div>
-        {% endfor %}
+      {% endfor %}
     </div>
-</section>
+  </section>
 {% endblock result_list %}
