@@ -1,7 +1,8 @@
 from django.contrib import admin
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from django_cms.users.admin import User
 from simple_history.admin import SimpleHistoryAdmin
+from django.utils.safestring import mark_safe
 
 from .models import Categoria, Contenido, User
 from django import forms
@@ -36,17 +37,22 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         "autor",
         "categoria",
     )
-    list_filter = ("fechaCreacion", "fechaVencimiento", "activo", "esPublico", "estado", "autor", "categoria")
-    search_fields = ("titulo",)
-    readonly_fields = ("fechaCreacion",)
-    actions = ("activar_contenidos", "desactivar_contenidos", "hacer_publicos_contenidos", "hacer_privados_contenidos")
+    list_filter = ("fechaCreacion", "fechaVencimiento", "esPublico")
+    search_fields = ("titulo", "autor__username", "categoria__titulo")
+    readonly_fields = ("fechaCreacion", "autor", "estado")
 
     def changelist_view(self, request, extra_context=None):
-        # Crea un diccionario donde cada estado es una clave y los contenidos son los valores
+        response = super().changelist_view(request, extra_context)
+        change_list = response.context_data["cl"]
+        queryset = change_list.queryset
+        # Comprobar si el usuario actual pertenece al grupo "Autor"
+        if request.user.groups.filter(name="Autor").exists():
+            # Si el usuario pertenece al grupo "Autor", filtrar el queryset para que solo contenga contenidos creados por el usuario actual
+            queryset = queryset.filter(autor=request.user)
         kanban_board_elements = {
-            nombre_estado: Contenido.objects.filter(estado=estado) for estado, nombre_estado in Contenido.estados
+            nombre_estado: list(filter(lambda content: content.estado == estado and content.activo, queryset))
+            for estado, nombre_estado in Contenido.estados
         }
-        # Añade el diccionario al contexto
         extra_context = extra_context or {}
         extra_context["kanban_board_elements"] = kanban_board_elements
         return super().changelist_view(request, extra_context=extra_context)
@@ -54,9 +60,10 @@ class ContenidoAdmin(SimpleHistoryAdmin):
     def get_readonly_fields(self, request, obj=None):
         if obj and obj.estado == 1:
             if request.user.groups.filter(name="Autor").exists():
-                return ("fechaCreacion", "esPublico", "estado", "autor")
+                return ("fechaCreacion", "esPublico", "autor", "estado")
         if obj and obj.estado == 2:
             if request.user.groups.filter(name="Autor").exists():
+                obj.contenido = mark_safe(obj.contenido)
                 return (
                     "titulo",
                     "contenido",
@@ -68,16 +75,66 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                     "autor",
                     "categoria",
                 )
+        if obj and obj.estado == 3:
+            if request.user.groups.filter(name="Autor").exists():
+                obj.contenido = mark_safe(obj.contenido)
+                return (
+                    "titulo",
+                    "contenido",
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "activo",
+                    "esPublico",
+                    "estado",
+                    "autor",
+                    "categoria",
+                )
+        if obj and obj.estado == 4:
+            if request.user.groups.filter(name="Autor").exists():
+                obj.contenido = mark_safe(obj.contenido)
+                return (
+                    "titulo",
+                    "contenido",
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "activo",
+                    "esPublico",
+                    "estado",
+                    "autor",
+                    "categoria",
+                )
+        if obj and obj.estado == 5:
+            if request.user.groups.filter(name="Autor").exists():
+                obj.contenido = mark_safe(obj.contenido)
+                return (
+                    "titulo",
+                    "contenido",
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "activo",
+                    "esPublico",
+                    "estado",
+                    "autor",
+                    "categoria",
+                )
+
         return self.readonly_fields
+
+    def contenido_display(self, obj):
+        return mark_safe(obj.contenido)
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         extra_context = extra_context or {}
         extra_context["show_button_autor"] = False
         contenido = Contenido.objects.get(pk=object_id)
+        if request.user.groups.filter(name="Autor").exists() and contenido.autor != request.user:
+            raise PermissionError("No tiene permiso para ver este contenido.")
+
         if (
             request.user.groups.filter(name="Autor").exists() and contenido.estado == 1
         ):  # Si el usuario pertenece al grupo 'Autor' y el contenido está en estado 1
             extra_context["show_button_autor"] = True
+
         return super().change_view(
             request,
             object_id,
@@ -89,41 +146,17 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         if "_revisar" in request.POST:  # Si se hizo clic en el botón 'Enviar'
             obj.estado = 2  # Cambia el estado a 2
             obj.save()  # Guarda el objeto
-            self.message_user(request, "El contenido ha sido enviado.")  # Muestra un mensaje al usuario
+            self.message_user(request, "El contenido ha sido enviado a revisión.")  # Muestra un mensaje al usuario
             return redirect("admin:contenido_contenido_changelist")  # Redirige al usuario a la vista de lista
         return super().response_change(request, obj)
 
-    @admin.action(description="Activar contenido/s seleccionado/s")
-    def activar_contenidos(self, request, queryset):
-        queryset.update(activo=True)
-        if queryset.count() == 1:
-            self.message_user(request, "El contenido seleccionado ha sido activado.")
-        else:
-            self.message_user(request, "Los contenidos seleccionados han sido activados.")
+    def has_delete_permission(self, request, obj=None):
+        return False
 
-    @admin.action(description="Desactivar contenido/s seleccionado/s")
-    def desactivar_contenidos(self, request, queryset):
-        queryset.update(activo=False)
-        if queryset.count() == 1:
-            self.message_user(request, "El contenido seleccionado ha sido desactivado.")
-        else:
-            self.message_user(request, "Los contenidos seleccionados han sido desactivados.")
-
-    @admin.action(description="Hacer público/s contenido/s seleccionado/s")
-    def hacer_publicos_contenidos(self, request, queryset):
-        queryset.update(esPublico=True)
-        if queryset.count() == 1:
-            self.message_user(request, "El contenido seleccionado ha sido hecho público.")
-        else:
-            self.message_user(request, "Los contenidos seleccionados han sido hechos públicos.")
-
-    @admin.action(description="Hacer privado/s contenido/s seleccionado/s")
-    def hacer_privados_contenidos(self, request, queryset):
-        queryset.update(esPublico=False)
-        if queryset.count() == 1:
-            self.message_user(request, "El contenido seleccionado ha sido hecho privado.")
-        else:
-            self.message_user(request, "Los contenidos seleccionados han sido hechos privados.")
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.autor = request.user
+        super().save_model(request, obj, form, change)
 
 @admin.register(Categoria)
 class CategoriaAdmin(SimpleHistoryAdmin):
