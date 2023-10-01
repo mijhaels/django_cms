@@ -1,6 +1,11 @@
 {% extends "admin/submit_line.html" %}
 
 {% block submit-row %}
-  {% if show_button_autor %}<input type="submit" value="Enviar a revisión" name="_revisar" />{% endif %}
+  {% if show_button_autor %}<input type="submit" value="Enviar a revisión" name="_aRevision" />{% endif %}
+  {% if show_button_editor %}<input type="submit" value="Enviar a publicar" name="_aPublicar" />{% endif %}
+  {% if show_button_publicador %}<input type="submit" value="Publicar" name="_aPublicado" />{% endif %}
+  {% if show_button_publicador %}<input type="submit" value="Rechazar" name="_aRechazado" />{% endif %}
   {{ block.super }}
 {% endblock %}
+
+

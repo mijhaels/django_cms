@@ -28,6 +28,8 @@ class Contenido(models.Model):
     ]
     estado = models.IntegerField(choices=estados, default=1)  #: Estado del contenido
     autor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="autor")  #: Autor del contenido
+    editor=models.ForeignKey(User, on_delete=models.CASCADE, related_name="editor", blank=True, null=True) #: Editor del contenido
+    publicador=models.ForeignKey(User, on_delete=models.CASCADE, related_name="publicador", blank=True, null=True) #: Publicador del contenido
     historial = HistoricalRecords()  #: Historial de cambios del contenido
     categoria = models.ForeignKey(
         "Categoria", on_delete=models.CASCADE, related_name="categoria"
