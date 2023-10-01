@@ -51,8 +51,9 @@ class Categoria(models.Model):
         help_text="Ejemplo: 'Ingeniería de Software II' -> 'is2'",
     )
     activo = models.BooleanField(default=True, verbose_name="¿Está activo?")  #: ¿Está activa la categoría?
-    esModerada = models.BooleanField(default=False, verbose_name="¿Es moderada?")  #: ¿Es moderada la categoría?
+    esModerada = models.BooleanField(default=True, verbose_name="¿Es moderada?")  #: ¿Es moderada la categoría?
     historial = HistoricalRecords()  #: Historial de cambios de la categoría
+    autores_permitidos = models.ManyToManyField(User, related_name="categorias_autorizadas") #: Autores permitidos para publicar en la categoría
 
     def save(self, *args, **kwargs):
         if not self.activo:

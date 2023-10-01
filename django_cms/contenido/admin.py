@@ -4,7 +4,25 @@ from django_cms.users.admin import User
 from simple_history.admin import SimpleHistoryAdmin
 from django.utils.safestring import mark_safe
 
-from .models import Categoria, Contenido
+from .models import Categoria, Contenido, User
+from django import forms
+
+class CategoriaForm(forms.ModelForm):
+    class Meta:
+        model = Categoria
+        fields = ['titulo', 'alias', 'activo', 'esModerada', 'autores_permitidos']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.esModerada:
+            self.fields['autores_permitidos'].required = not self.instance.esModerada
+
+    def clean(self):
+        cleaned_data = super().clean()
+        esModerada = cleaned_data.get('esModerada')
+        autores_permitidos = cleaned_data.get('autores_permitidos')
+        if not esModerada and not autores_permitidos:
+            self.add_error('autores_permitidos', 'Este campo es requerido.')
 
 
 @admin.register(Contenido)
@@ -275,9 +293,9 @@ class ContenidoAdmin(SimpleHistoryAdmin):
             obj.autor = request.user
         super().save_model(request, obj, form, change)
 
-
 @admin.register(Categoria)
 class CategoriaAdmin(SimpleHistoryAdmin):
+    form = CategoriaForm
     list_display = ("titulo", "alias", "activo", "esModerada")
     list_filter = ("titulo", "alias", "activo", "esModerada")
     search_fields = ("titulo", "alias", "activo", "esModerada")
@@ -303,3 +321,6 @@ class CategoriaAdmin(SimpleHistoryAdmin):
             self.message_user(request, "La categoría seleccionada ha sido hecha no moderada.")
         else:
             self.message_user(request, "Las categorías seleccionadas han sido hechas no moderadas.")
+    
+    class Media:
+        js = ('js/project.js',)
