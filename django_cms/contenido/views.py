@@ -7,7 +7,7 @@ from .models import Categoria, Contenido
 
 class ContenidoView(View):
     def get(self, request):
-        contenido_list = Contenido.objects.filter(activo=True).order_by("-fechaCreacion")
+        contenido_list = Contenido.objects.filter(activo=True, estado=4).order_by("-fechaCreacion")
         paginator = Paginator(contenido_list, 2)
 
         page_number = request.GET.get("page")
