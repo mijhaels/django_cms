@@ -54,7 +54,6 @@
       font-weight: 500;
     }
   </style>
-
   <section>
     {% csrf_token %}
     <h1>Tablero Kanban</h1>
@@ -70,8 +69,8 @@
           {% for contenido in contenidos %}
             <div class="state-card">
               <a href="{% url 'admin:contenido_contenido_change' contenido.id %}">{{ contenido.titulo }}</a>
-                <p>{{ contenido.categoria }}</p>
-                <p>{{ contenido.autor }}</p>
+              <p>{{ contenido.categoria }}</p>
+              <p>{{ contenido.autor }}</p>
             </div>
           {% endfor %}
         </div>
@@ -79,5 +78,5 @@
     </div>
   </section>
 {% endblock result_list %}
-
-{% block pagination %}{% endblock %}
+{% block pagination %}
+{% endblock pagination %}

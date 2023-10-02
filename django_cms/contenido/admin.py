@@ -1,11 +1,11 @@
-from django.contrib import admin
-from django.shortcuts import redirect
-from django_cms.users.admin import User
-from simple_history.admin import SimpleHistoryAdmin
-from django.utils.safestring import mark_safe
-from django.db.models import Q
-from .models import Categoria, Contenido
 from django import forms
+from django.contrib import admin
+from django.db.models import Q
+from django.shortcuts import redirect
+from django.utils.safestring import mark_safe
+from simple_history.admin import SimpleHistoryAdmin
+
+from .models import Categoria, Contenido
 
 
 class CategoriaForm(forms.ModelForm):

@@ -61,7 +61,7 @@ class Categoria(models.Model):
         User, related_name="categorias_autorizadas"
     )  #: Autores permitidos para publicar en la categoría
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):  # Hola
         if not self.activo:
             contenidos_activos = Contenido.objects.filter(
                 categoria=self, activo=True
