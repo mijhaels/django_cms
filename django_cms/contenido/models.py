@@ -28,8 +28,12 @@ class Contenido(models.Model):
     ]
     estado = models.IntegerField(choices=estados, default=1)  #: Estado del contenido
     autor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="autor")  #: Autor del contenido
-    editor=models.ForeignKey(User, on_delete=models.CASCADE, related_name="editor", blank=True, null=True) #: Editor del contenido
-    publicador=models.ForeignKey(User, on_delete=models.CASCADE, related_name="publicador", blank=True, null=True) #: Publicador del contenido
+    editor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="editor", blank=True, null=True
+    )  #: Editor del contenido
+    publicador = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="publicador", blank=True, null=True
+    )  #: Publicador del contenido
     historial = HistoricalRecords()  #: Historial de cambios del contenido
     categoria = models.ForeignKey(
         "Categoria", on_delete=models.CASCADE, related_name="categoria"
@@ -53,7 +57,9 @@ class Categoria(models.Model):
     activo = models.BooleanField(default=True, verbose_name="¿Está activo?")  #: ¿Está activa la categoría?
     esModerada = models.BooleanField(default=True, verbose_name="¿Es moderada?")  #: ¿Es moderada la categoría?
     historial = HistoricalRecords()  #: Historial de cambios de la categoría
-    autores_permitidos = models.ManyToManyField(User, related_name="categorias_autorizadas") #: Autores permitidos para publicar en la categoría
+    autores_permitidos = models.ManyToManyField(
+        User, related_name="categorias_autorizadas"
+    )  #: Autores permitidos para publicar en la categoría
 
     def save(self, *args, **kwargs):
         if not self.activo:
