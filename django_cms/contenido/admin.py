@@ -35,11 +35,12 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         "esPublico",
         "estado",
         "autor",
+        "editor",
         "categoria",
     )
     list_filter = ("fechaCreacion", "fechaVencimiento", "esPublico")
     search_fields = ("titulo", "autor__username", "categoria__titulo")
-    readonly_fields = ("fechaCreacion", "autor", "estado")
+    readonly_fields = ("fechaCreacion", "autor","editor","publicador", "estado")
 
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context)
@@ -73,6 +74,32 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                     "esPublico",
                     "estado",
                     "autor",
+                    "editor",
+                    "categoria",
+                )
+            if request.user.groups.filter(name="Editor").exists():
+                obj.contenido = mark_safe(obj.contenido)
+                return (
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "esPublico",
+                    "estado",
+                    "autor",
+                    "editor",
+                    "categoria",
+                )
+            if request.user.groups.filter(name="Publicador").exists():
+                obj.contenido = mark_safe(obj.contenido)
+                return (
+                    "titulo",
+                    "contenido",
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "activo",
+                    "estado",
+                    "autor",
+                    "editor",
+                    "publicador",
                     "categoria",
                 )
         if obj and obj.estado == 3:
@@ -87,6 +114,32 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                     "esPublico",
                     "estado",
                     "autor",
+                    "editor",
+                    "categoria",
+                )
+            if request.user.groups.filter(name="Editor").exists():
+                obj.contenido = mark_safe(obj.contenido)
+                return (
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "autor",
+                    "editor",
+                    "esPublico",
+                    "estado",
+                    "categoria",
+                )
+            if request.user.groups.filter(name="Publicador").exists():
+                obj.contenido = mark_safe(obj.contenido)
+                return (
+                    "titulo",
+                    "contenido",
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "activo",
+                    "estado",
+                    "autor",
+                    "editor",
+                    "publicador",
                     "categoria",
                 )
         if obj and obj.estado == 4:
@@ -101,6 +154,32 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                     "esPublico",
                     "estado",
                     "autor",
+                    "editor",
+                    "categoria",
+                )
+            if request.user.groups.filter(name="Editor").exists():
+                obj.contenido = mark_safe(obj.contenido)
+                return (
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "autor",
+                    "editor",
+                    "esPublico",
+                    "estado",
+                    "categoria",
+                )
+            if request.user.groups.filter(name="Publicador").exists():
+                obj.contenido = mark_safe(obj.contenido)
+                return (
+                    "titulo",
+                    "contenido",
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "activo",
+                    "estado",
+                    "autor",
+                    "editor",
+                    "publicador",
                     "categoria",
                 )
         if obj and obj.estado == 5:
@@ -115,6 +194,32 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                     "esPublico",
                     "estado",
                     "autor",
+                    "editor",
+                    "categoria",
+                )
+            if request.user.groups.filter(name="Editor").exists():
+                obj.contenido = mark_safe(obj.contenido)
+                return (
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "autor",
+                    "editor",
+                    "esPublico",
+                    "estado",
+                    "categoria",
+                )
+            if request.user.groups.filter(name="Publicador").exists():
+                obj.contenido = mark_safe(obj.contenido)
+                return (
+                    "titulo",
+                    "contenido",
+                    "fechaCreacion",
+                    "fechaVencimiento",
+                    "activo",
+                    "estado",
+                    "autor",
+                    "editor",
+                    "publicador",
                     "categoria",
                 )
 
@@ -135,6 +240,15 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         ):  # Si el usuario pertenece al grupo 'Autor' y el contenido está en estado 1
             extra_context["show_button_autor"] = True
 
+        if (
+            request.user.groups.filter(name="Editor").exists() and contenido.estado == 2
+        ):  # Si el usuario pertenece al grupo 'Editor' y el contenido está en estado 2
+            extra_context["show_button_editor"] = True  
+        
+        if (
+            request.user.groups.filter(name="Publicador").exists() and contenido.estado == 3
+        ): # Si el usuario pertenece al grupo 'Publicador' y el contenido está en estado 3
+            extra_context["show_button_publicador"] = True
         return super().change_view(
             request,
             object_id,
@@ -142,12 +256,33 @@ class ContenidoAdmin(SimpleHistoryAdmin):
             extra_context=extra_context,
         )
 
+
+    
     def response_change(self, request, obj):
-        if "_revisar" in request.POST:  # Si se hizo clic en el botón 'Enviar'
+        if "_aRevision" in request.POST:  # Si se hizo clic en el botón 'Revisar'
             obj.estado = 2  # Cambia el estado a 2
             obj.save()  # Guarda el objeto
             self.message_user(request, "El contenido ha sido enviado a revisión.")  # Muestra un mensaje al usuario
             return redirect("admin:contenido_contenido_changelist")  # Redirige al usuario a la vista de lista
+        
+        if "_aPublicar" in request.POST:  # Si se hizo clic en el botón 'Publicar'
+            obj.estado = 3  # Cambia el estado a 3
+            obj.save()  # Guarda el objeto
+            self.message_user(request, "El contenido ha sido enviado a publicar.")  # Muestra un mensaje al usuario
+            return redirect("admin:contenido_contenido_changelist")  # Redirige al usuario a la vista de lista
+        
+        if "_aPublicado" in request.POST:  # Si se hizo clic en el botón 'Publicado'
+            obj.estado = 4  # Cambia el estado a 4
+            obj.save()  # Guarda el objeto
+            self.message_user(request, "El contenido ha sido enviado a publicado.")  # Muestra un mensaje al usuario
+            return redirect("admin:contenido_contenido_changelist")  # Redirige al usuario a la vista de lista
+        
+        if "_aRechazado" in request.POST:  # Si se hizo clic en el botón 'Rechazado'
+            obj.estado = 5  # Cambia el estado a 5
+            obj.save()  # Guarda el objeto
+            self.message_user(request, "El contenido ha sido enviado a rechazado.")  # Muestra un mensaje al usuario
+            return redirect("admin:contenido_contenido_changelist")  # Redirige al usuario a la vista de lista
+        
         return super().response_change(request, obj)
 
     def has_delete_permission(self, request, obj=None):
