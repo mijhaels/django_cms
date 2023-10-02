@@ -12,6 +12,7 @@
 
 import os
 import sys
+
 import django
 
 if os.getenv("READTHEDOCS", default=False) == "True":
@@ -32,7 +33,7 @@ author = "Iván Cáceres Dahiana Dávalos Lucero Estigarribia Mijhael Samaniego"
 
 
 # -- General configuration ---------------------------------------------------
-
+language = "es"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.

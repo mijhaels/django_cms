@@ -2,53 +2,29 @@
 
 Sistema de Gestión de Contenidos
 
-[![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/)
 
-License: MIT
+## Comandos básicos
+## Despliegue
+- Para la creación del stack, abra un terminal en la raíz del proyecto y ejecute lo siguiente para el desarrollo local:
 
-## Settings
+      $ docker-compose -f local.yml build
 
-Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings.html).
+- Para la ejecución del stack, ejecute el siguiente comando:
 
-## Basic Commands
+      $ docker-compose -f local.yml up      
+### Configuración de los usuarios
 
-### Setting Up Your Users
+- Para crear una **cuenta de usuario normal**, sólo tienes que ir a Regístrate y rellenar el formulario. Una vez que lo envíes, verás una página "Verifica tu dirección de correo electrónico". Ve a tu consola para ver un mensaje simulado de verificación de correo electrónico. Copie el enlace en su navegador. Ahora el correo electrónico del usuario debería estar verificado y listo para funcionar.
 
-- To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
+- Para crear una **cuenta de super usuario**, utiliza este comando:
 
-- To create a **superuser account**, use this command:
+      $ docker compose -f local.yml run --rm django python manage.py createsuperuser
 
-      $ python manage.py createsuperuser
+Para mayor comodidad, puedes mantener a tu usuario normal conectado en Chrome y a tu superusuario conectado en Firefox (o similar), de modo que puedas ver cómo se comporta el sitio para ambos tipos de usuarios.
 
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
+#### Correr los tests con pytest
+- Para llevar a cabo la acción utilice este comando:
 
-### Type checks
-
-Running type checks with mypy:
-
-    $ mypy django_cms
-
-### Test coverage
-
-To run the tests, check your test coverage, and generate an HTML coverage report:
-
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
-
-#### Running tests with pytest
-
-    $ pytest
-
-### Live reloading and Sass CSS compilation
-
-Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/developing-locally.html#sass-compilation-live-reloading).
-
-## Deployment
-
-The following details how to deploy this application.
-
-### Docker
-
-See detailed [cookiecutter-django Docker documentation](http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html).
+      $ docker compose -f local.yml run --rm django pytest

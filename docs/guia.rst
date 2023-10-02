@@ -10,9 +10,9 @@ Antes de empezar
 ----------------------------------------------------------------------
 Clonar el repositorio
 
-.. code-block:: python
+ .. code-block:: python
 
-   git clone https://github.com/Andythem23/django_cms.git
+    $ git clone https://github.com/Andythem23/django_cms.git
 
 Creación de Stack
 ----------------------------------------------------------------------
@@ -20,7 +20,7 @@ Esto puede tardar un poco, especialmente la primera vez que ejecute este comando
 
 Abra un terminal en la raíz del proyecto y ejecute lo siguiente para el desarrollo local:
 
-.. code-block:: python
+ .. code-block:: python
 
    $ docker-compose -f local.yml build
 
@@ -43,6 +43,35 @@ Como con cualquier comando shell que deseemos ejecutar en nuestro contenedor, es
    $ docker compose -f local.yml run --rm django python manage.py createsuperuser
 
 Aquí, **Django** es el servicio de destino contra el que estamos ejecutando los comandos. Además, ten en cuenta que **docker exec** no funciona para ejecutar comandos de gestión.
+
+Ejecución de comandos de calidad de codigo:
+----------------------------------------------------------------------
+A continuación se demuestran los comandos a ser utilizados para optimizar la calidad de código
+
+Se utiliza para formatear todos los archivos .py
+ .. code-block:: python
+
+   $ docker compose -f local.yml run --rm django black .
+
+Se utiliza para linting de los archivos .py
+ .. code-block:: python
+   
+   $ docker compose -f local.yml run --rm django flake8 
+
+Se utiliza para para ordenar los imports
+ .. code-block:: python
+   
+   $ docker compose -f local.yml run --rm django isort .
+
+Se utiliza para hacer linting de los archivos .html
+ .. code-block:: python
+      
+   $ docker compose -f local.yml run --rm django djlint . --lint 
+   
+Se utiliza para formatear todos los archivos .html
+ .. code-block:: python
+   
+   $ docker compose -f local.yml run --rm django djlint . --reformat
 
 .. 
    :members:
