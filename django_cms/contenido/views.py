@@ -32,7 +32,7 @@ class ContenidoBusquedaView(View):
         fechaCreacion = request.GET.get("fechaCreacion")
 
         # Obtiene todos los contenidos activos
-        contenido_list = Contenido.objects.filter(activo=True)
+        contenido_list = Contenido.objects.filter(activo=True, estado=4)
 
         # Si un autor fue provisto, filtra por autor
         if autor is not None:
