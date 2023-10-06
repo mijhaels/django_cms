@@ -25,9 +25,17 @@ class CategoriaForm(forms.ModelForm):
         if not esModerada and not autores_permitidos:
             self.add_error("autores_permitidos", "Este campo es requerido.")
 
+class ContenidoAdminForm(forms.ModelForm):
+    change_reason = forms.CharField(max_length=100, required=False, label="Agregar comentario")
+
+    class Meta:
+        model = Contenido
+        fields = '__all__'
+
 
 @admin.register(Contenido)
 class ContenidoAdmin(SimpleHistoryAdmin):
+    form = ContenidoAdminForm
     fields = (
         "titulo",
         "contenido",
@@ -40,10 +48,15 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         "autor",
         "editor",
         "publicador",
+        "change_reason",
     )
     list_filter = ("fechaCreacion", "fechaVencimiento", "esPublico")
     search_fields = ("titulo", "autor__username", "categoria__titulo")
     readonly_fields = ("fechaCreacion", "autor", "editor", "publicador", "estado")
+    history_list_display = ["estado"]
+
+    def estado(self, obj):
+        return obj.get_estado_display()
 
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context)
@@ -139,6 +152,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 obj.editor = request.user
             if obj.estado == 3:
                 obj.publicador = request.user
+        obj._change_reason = form.cleaned_data.get('change_reason')
         super().save_model(request, obj, form, change)
 
 
