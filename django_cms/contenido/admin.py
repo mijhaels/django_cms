@@ -103,18 +103,26 @@ class ContenidoAdmin(SimpleHistoryAdmin):
             raise PermissionError("No tiene permiso para ver este contenido.")
 
         if "Autor" in user_groups and contenido.estado == 1:
-            extra_context["show_button_autor"] = True
+            extra_context["show_button_revision"] = True
+            
+        if "Editor" in user_groups and contenido.estado == 5:
+            extra_context["show_button_revision"] = True
 
         if "Editor" in user_groups and contenido.estado == 2:
-            extra_context["show_button_editor"] = True
+            extra_context["show_button_a_publicar"] = True
 
         if "Publicador" in user_groups and contenido.estado == 3:
-            extra_context["show_button_publicador"] = True
+            extra_context["show_button_publicar"] = True
+            extra_context["show_button_rechazar"] = True
+        
+        if "Autor" in user_groups and contenido.estado == 5:
+            extra_context["show_button_borrador"] = True
 
         return super().change_view(request, object_id, form_url, extra_context=extra_context)
 
     def response_change(self, request, obj):
         actions = {
+            "_aBorrador": (1, "borrador"),  
             "_aRevision": (2, "revisión"),
             "_aPublicar": (3, "publicar"),
             "_aPublicado": (4, "publicado"),
