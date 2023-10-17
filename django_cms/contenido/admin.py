@@ -54,6 +54,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
     search_fields = ("titulo", "autor__username", "categoria__titulo")
     readonly_fields = ("fechaCreacion", "autor", "editor", "publicador", "estado")
     history_list_display = ["estado"]
+    excluded_fields = ["comment"]
 
     def estado(self, obj):
         return obj.get_estado_display()
@@ -93,8 +94,19 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 "categoria",
             )
             return readonly_fields
-
+        
         obj.contenido = mark_safe(obj.contenido)
+        if obj.estado == 3 and "Publicador" in groups:
+            readonly_fields += (
+            "titulo",
+            "contenido",
+            "fechaVencimiento",
+            "esPublico",
+            "activo",
+            "categoria",
+            )
+            return readonly_fields
+
         readonly_fields += (
             "titulo",
             "contenido",
@@ -102,6 +114,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
             "esPublico",
             "activo",
             "categoria",
+            "change_reason",
         )
         return readonly_fields
 
@@ -160,8 +173,11 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 obj.editor = request.user
             if obj.estado == 3:
                 obj.publicador = request.user
+        obj._change_reason = " "
+        obj.save()
         obj._change_reason = form.cleaned_data.get('change_reason')
-        super().save_model(request, obj, form, change)
+
+
 
 
 @admin.register(Categoria)
