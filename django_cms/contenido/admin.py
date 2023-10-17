@@ -91,6 +91,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
             readonly_fields += (
                 "fechaVencimiento",
                 "esPublico",
+                "activo",
                 "categoria",
             )
             return readonly_fields
