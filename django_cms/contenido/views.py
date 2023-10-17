@@ -4,7 +4,6 @@ from django.views import View
 
 from .models import Categoria, Contenido
 
-
 class ContenidoView(View):
     def get(self, request):
         contenido_list = Contenido.objects.filter(activo=True, estado=4).order_by("-fechaCreacion")
@@ -27,6 +26,7 @@ class ContenidoDetalleView(View):
 class ContenidoBusquedaView(View):
     def get(self, request):
         # Obtiene los parámetros de búsqueda
+        publicacion = request.GET.get("publicacion")
         autor = request.GET.get("autor")
         categoria = request.GET.get("categoria")
         fechaCreacion = request.GET.get("fechaCreacion")
@@ -34,13 +34,20 @@ class ContenidoBusquedaView(View):
         # Obtiene todos los contenidos activos
         contenido_list = Contenido.objects.filter(activo=True, estado=4)
 
+        # Si una publicación fue provista, filtra por publicación
+        if publicacion is not None:
+            contenido_list = contenido_list.filter(titulo__icontains=publicacion)
+            termino = publicacion
+        
         # Si un autor fue provisto, filtra por autor
         if autor is not None:
-            contenido_list = contenido_list.filter(autor__username=autor)
+            contenido_list = contenido_list.filter(autor__username__icontains=autor)
+            termino = autor
 
         # Si una categoría fue provista, filtra por categoría
         if categoria is not None:
-            contenido_list = contenido_list.filter(categoria__titulo=categoria)
+            contenido_list = contenido_list.filter(categoria__titulo__icontains=categoria)
+            termino = categoria
 
         # Si una fecha fue provista, filtra por fecha
         if fechaCreacion is not None:
@@ -54,4 +61,4 @@ class ContenidoBusquedaView(View):
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
 
-        return render(request, "pages/busqueda_resultados.html", {"page_obj": page_obj})
+        return render(request, "pages/busqueda_resultados.html", {"page_obj": page_obj, "termino": termino})

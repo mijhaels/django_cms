@@ -86,14 +86,22 @@
               {% endif %}
             </ul>
             <div class="d-flex align-items-center mx-auto">
-              <form class="navbar d-flex" role="search">
-                <input class="form-control me-2"
-                       type="search"
-                       placeholder="Buscar"
-                       aria-label="Search" />
+              <form class="navbar d-flex" role="search" action="{% url 'contenido:contenido_busqueda' %}" method="get">
+                <div>
+                   <input class="form-control me-2"
+                         type="search"
+                         width="100px"
+                         placeholder="Buscar"
+                         aria-label="Search"
+                         name="publicacion" />
+                </div>
+                <div style="margin-left:5px;"> <!-- Añadir un margen de 10px entre los botones -->
+                  <button class="btn btn-outline-light" type="submit" style="width:80px;">Buscar</button>
+              </div>
+                  
               </form>
-              <button class="btn btn-outline-light" type="submit">Buscar</button>
-            </div>
+          </div>
+          
             {% if request.user.is_staff %}
               <a id="admin-cms"
                  class="nav-link btn btn-secondary text-white p-1 ms-auto "
@@ -113,6 +121,8 @@
                     data-bs-dismiss="alert"
                     aria-label="Close"></button>
           </div>
+          
+          
         {% endfor %}
       {% endif %}
       {% block content %}

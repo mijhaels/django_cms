@@ -3,8 +3,41 @@
 {% block content %}
   <div class="container mt-5">
     <div class="row">
-      <div class="col-md-8">
-        <h2>Resultados de la búsqueda:</h2>
+      <div class="col-md-8 ">
+        <h3 class="text-secondary ">Resultados de la búsqueda:</h3>
+        <ul class="nav nav-pills my-3">
+          <li class="nav-item">
+            <a class="nav-link btn btn-primary" href="{% url 'contenido:contenido_busqueda' %}?publicacion={{ termino }}" aria-selected="true">Publicaciones</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-primary" href="{% url 'contenido:contenido_busqueda' %}?autor={{ termino }}">Autores</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-primary" href="{% url 'contenido:contenido_busqueda' %}?categoria={{ termino }}">Categorias</a>
+          </li>
+        </ul>
+        
+        <script>
+          window.onload = function() {
+              var navLinks = document.getElementsByClassName('nav-link');
+          
+              for (var i = 0; i < navLinks.length; i++) {
+                  navLinks[i].addEventListener('click', function() {
+                      var current = document.getElementsByClassName('active');
+                      current[0].className = current[0].className.replace(' active', '');
+                      this.className += ' active';
+                  });
+              }
+          
+              var url = window.location.href;
+              for (var i = 0; i < navLinks.length; i++) {
+                  if (navLinks[i].href === url) {
+                      navLinks[i].className += ' active';
+                  }
+              }
+          };
+          </script>
+
         {% if page_obj %}
           {% for contenido in page_obj %}
             <a class="link-light"
