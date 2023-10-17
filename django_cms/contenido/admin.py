@@ -27,6 +27,7 @@ class CategoriaForm(forms.ModelForm):
 
 class ContenidoAdminForm(forms.ModelForm):
     change_reason = forms.CharField(max_length=100, required=False, label="Agregar comentario")
+    resumen = forms.CharField(widget=forms.Textarea, label="Resumen del contenido")
 
     class Meta:
         model = Contenido
@@ -38,6 +39,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
     form = ContenidoAdminForm
     fields = (
         "titulo",
+        "resumen",
         "contenido",
         "categoria",
         "fechaCreacion",
@@ -100,6 +102,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         if obj.estado == 3 and "Publicador" in groups:
             readonly_fields += (
             "titulo",
+            "resumen",
             "contenido",
             "fechaVencimiento",
             "esPublico",
@@ -110,6 +113,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
 
         readonly_fields += (
             "titulo",
+            "resumen",
             "contenido",
             "fechaVencimiento",
             "esPublico",

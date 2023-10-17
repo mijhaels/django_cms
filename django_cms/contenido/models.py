@@ -8,6 +8,7 @@ from django_cms.users.models import User
 
 class Contenido(models.Model):
     titulo = models.CharField(max_length=255, blank=False, null=False, verbose_name="Título")  #: Título del contenido
+    resumen = models.TextField(blank=True, null=True)
     contenido = HTMLField(
         blank=False, null=False, verbose_name="Descripción del contenido"
     )  #: Contenido de la publicación
