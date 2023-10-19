@@ -273,4 +273,3 @@ django_cms/media/
 .ipython/
 .env
 .envs/*
-!.envs/.local/
