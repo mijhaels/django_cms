@@ -197,15 +197,15 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 obj.estado = estado
                 obj.save()
                 self.message_user(request, f"El contenido ha sido enviado a {message}.")
-                autorEmail = getattr(obj.autor, "email", None)
-                editorEmail = getattr(obj.editor, "email", None)
-                publicadorEmail = getattr(obj.publicador, "email", None)
-                if autorEmail or editorEmail or publicadorEmail:
+                emails = [getattr(obj, role, None) for role in ['autor', 'editor', 'publicador']]
+                emails = [rol.email for rol in emails if rol]
+
+                if emails:
                     send_mail(
                         "Estado del contenido",
                         f"El contenido {obj.titulo} ha sido enviado a {message}.",
                         None,
-                        [autorEmail, editorEmail, publicadorEmail],
+                        emails,
                         fail_silently=False,
                     )
                 return redirect("admin:contenido_contenido_changelist")
