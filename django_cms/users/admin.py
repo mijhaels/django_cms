@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import admin as auth_admin
 from django.contrib.auth import decorators, get_user_model
-
+from allauth.account.models import EmailAddress
 from django_cms.users.forms import UserAdminChangeForm, UserAdminCreationForm
 
 User = get_user_model()
@@ -38,3 +38,16 @@ class UserAdmin(auth_admin.UserAdmin):
     )
     list_display = ["username", "name", "is_superuser"]
     search_fields = ["name"]
+
+
+admin.site.unregister(EmailAddress)
+
+@admin.register(EmailAddress)
+class EmailAddressAdmin(admin.ModelAdmin):
+    list_display = ["email", "user", "verified", "primary"]
+    def get_queryset(self, request):
+        qs = super(EmailAddressAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(user=request.user)
+
