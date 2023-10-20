@@ -1,6 +1,10 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django_cms.utils.storages import MediaRootS3Boto3Storage
 
 from .models import Categoria, Contenido
 
@@ -17,7 +21,7 @@ class ContenidoView(View):
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
 
-        categorias = Categoria.objects.all()
+        categorias = Categoria.objects.filter(activo=True)
 
         return render(request, "pages/inicio.html", {"page_obj": page_obj, "categorias": categorias})
 
@@ -43,7 +47,7 @@ class ContenidoBusquedaView(View):
         if publicacion is not None:
             contenido_list = contenido_list.filter(titulo__icontains=publicacion)
             termino = publicacion
-        
+
         # Si un autor fue provisto, filtra por autor
         if autor is not None:
             contenido_list = contenido_list.filter(autor__username__icontains=autor)
@@ -67,3 +71,12 @@ class ContenidoBusquedaView(View):
         page_obj = paginator.get_page(page_number)
 
         return render(request, "pages/busqueda_resultados.html", {"page_obj": page_obj, "termino": termino})
+
+@method_decorator(csrf_exempt, name='dispatch')
+class SubirImagenView(View):
+    def post(self, request):
+        image = request.FILES['file']
+        storage = MediaRootS3Boto3Storage()
+        name = storage.save(image.name, image)
+        url = storage.url(name)
+        return JsonResponse({'location': url})
