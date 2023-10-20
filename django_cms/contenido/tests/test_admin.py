@@ -28,17 +28,17 @@ class TestCategoriaAdmin:
                 "esModerada": False,
             },
         )
-        #assert response.status_code == 302  
-        #assert Categoria.objects.filter(titulo="test").exists()
-        
+        # assert response.status_code == 302
+        # assert Categoria.objects.filter(titulo="test").exists()
+
     def test_hacer_moderadas_categorias(self, admin_client, db):
         # Crear una categoría no moderada
         Categoria.objects.create(titulo="test", alias="test_alias", activo=True, esModerada=False)
 
         url = reverse("admin:contenido_categoria_changelist")
         data = {
-            'action': 'hacer_moderadas_categorias',
-            '_selected_action': Categoria.objects.values_list('id', flat=True)
+            "action": "hacer_moderadas_categorias",
+            "_selected_action": Categoria.objects.values_list("id", flat=True),
         }
         response = admin_client.post(url, data, follow=True)
 
@@ -51,4 +51,3 @@ class TestContenidoAdmin:
         url = reverse("admin:contenido_contenido_changelist")
         response = admin_client.get(url)
         assert response.status_code == 200
-

@@ -1,12 +1,14 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render
-from django.views import View
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
 from django.utils.decorators import method_decorator
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+
 from django_cms.utils.storages import MediaRootS3Boto3Storage
 
 from .models import Categoria, Contenido
+
 
 class ContenidoView(View):
     def get(self, request):
@@ -72,11 +74,12 @@ class ContenidoBusquedaView(View):
 
         return render(request, "pages/busqueda_resultados.html", {"page_obj": page_obj, "termino": termino})
 
-@method_decorator(csrf_exempt, name='dispatch')
+
+@method_decorator(csrf_exempt, name="dispatch")
 class SubirImagenView(View):
     def post(self, request):
-        image = request.FILES['file']
+        image = request.FILES["file"]
         storage = MediaRootS3Boto3Storage()
         name = storage.save(image.name, image)
         url = storage.url(name)
-        return JsonResponse({'location': url})
+        return JsonResponse({"location": url})

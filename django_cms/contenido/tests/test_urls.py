@@ -2,8 +2,7 @@ from django.test import TestCase
 from django.urls import resolve, reverse
 
 from django_cms.contenido.tests.factories import CategoriaFactory, ContenidoFactory
-from django_cms.contenido.views import ContenidoDetalleView
-from django_cms.contenido.views import ContenidoBusquedaView
+from django_cms.contenido.views import ContenidoBusquedaView, ContenidoDetalleView
 
 
 class ContenidoURLsTest(TestCase):

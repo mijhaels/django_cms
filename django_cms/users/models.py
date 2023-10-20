@@ -27,4 +27,3 @@ class User(AbstractUser):
         """Desactivar usuario."""
         self.is_active = False
         self.save()
-    

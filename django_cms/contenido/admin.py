@@ -1,10 +1,11 @@
 from django import forms
 from django.contrib import admin
+from django.core.mail import send_mail
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.utils.safestring import mark_safe
 from simple_history.admin import SimpleHistoryAdmin
-from django.core.mail import send_mail
+
 from .models import Categoria, Contenido
 
 
@@ -28,13 +29,14 @@ class CategoriaForm(forms.ModelForm):
         if self.instance.esModerada:
             self.fields["autores_permitidos"].required = not self.instance.esModerada
 
+
 class ContenidoAdminForm(forms.ModelForm):
     change_reason = forms.CharField(max_length=100, required=False, label="Agregar comentario")
     resumen = forms.CharField(widget=forms.Textarea, label="Resumen del contenido")
 
     class Meta:
         model = Contenido
-        fields = '__all__'
+        fields = "__all__"
 
 
 @admin.register(Contenido)
@@ -60,7 +62,6 @@ class ContenidoAdmin(SimpleHistoryAdmin):
     readonly_fields = ("fechaCreacion", "autor", "editor", "publicador", "estado")
     history_list_display = ["estado"]
 
-
     def estado(self, obj):
         return obj.get_estado_display()
 
@@ -85,21 +86,21 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         return super().changelist_view(request, extra_context=extra_context)
 
     def get_readonly_fields(self, request, obj=None):
-            groups = request.user.groups.values_list("name", flat=True)
-            readonly_fields = self.readonly_fields
+        groups = request.user.groups.values_list("name", flat=True)
+        readonly_fields = self.readonly_fields
 
-            if obj.estado == 2 and "Editor" in groups:
-                readonly_fields += (
-                    "fechaVencimiento",
-                    "esPublico",
-                    "activo",
-                    "categoria",
-                )
+        if obj.estado == 2 and "Editor" in groups:
+            readonly_fields += (
+                "fechaVencimiento",
+                "esPublico",
+                "activo",
+                "categoria",
+            )
 
-            obj.contenido = mark_safe(obj.contenido)
+        obj.contenido = mark_safe(obj.contenido)
 
-            if obj.estado == 3 and "Publicador" in groups:
-                readonly_fields += (
+        if obj.estado == 3 and "Publicador" in groups:
+            readonly_fields += (
                 "titulo",
                 "resumen",
                 "contenido",
@@ -107,9 +108,9 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 "esPublico",
                 "activo",
                 "categoria",
-                )
+            )
 
-            return readonly_fields
+        return readonly_fields
 
     def has_change_permission(self, request, obj=None):
         groups = request.user.groups.values_list("name", flat=True)
@@ -125,8 +126,8 @@ class ContenidoAdmin(SimpleHistoryAdmin):
 
     def revert_disabled(self, request, obj=None):
         groups = request.user.groups.values_list("name", flat=True)
-        history = getattr(obj, '_history', None)
-        estado = getattr(history, 'estado', None)
+        history = getattr(obj, "_history", None)
+        estado = getattr(history, "estado", None)
         if not obj:
             return False
         if obj.estado == 1 and "Autor" in groups and estado == 1:
@@ -139,9 +140,9 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         return mark_safe(obj.contenido)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-            if db_field.name == "categoria":
-                kwargs["queryset"] = Categoria.objects.filter(Q(autores_permitidos=request.user) | Q(esModerada=True))
-            return super().formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == "categoria":
+            kwargs["queryset"] = Categoria.objects.filter(Q(autores_permitidos=request.user) | Q(esModerada=True))
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         extra_context = extra_context or {}
@@ -151,10 +152,18 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         if "Autor" in user_groups and contenido.autor != request.user:
             raise PermissionError("No tiene permiso para ver este contenido.")
 
-        if "Autor" in user_groups and contenido.estado == 1 and contenido.autor in contenido.categoria.autores_permitidos.all():
+        if (
+            "Autor" in user_groups
+            and contenido.estado == 1
+            and contenido.autor in contenido.categoria.autores_permitidos.all()
+        ):
             extra_context["show_button_publicar"] = True
 
-        if "Autor" in user_groups and contenido.estado == 1 and contenido.autor not in contenido.categoria.autores_permitidos.all():
+        if (
+            "Autor" in user_groups
+            and contenido.estado == 1
+            and contenido.autor not in contenido.categoria.autores_permitidos.all()
+        ):
             extra_context["show_button_revision"] = True
 
         if "Editor" in user_groups and contenido.estado == 5:
@@ -186,11 +195,11 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 obj.save()
                 self.message_user(request, f"El contenido ha sido enviado a {message}.")
                 send_mail(
-                'Estado del contenido',
-                f'El contenido {obj.titulo} ha sido enviado a {message}.',
-                None,
-                [obj.autor.email, obj.editor.email, obj.publicador.email],
-                fail_silently=False,
+                    "Estado del contenido",
+                    f"El contenido {obj.titulo} ha sido enviado a {message}.",
+                    None,
+                    [obj.autor.email, obj.editor.email, obj.publicador.email],
+                    fail_silently=False,
                 )
                 return redirect("admin:contenido_contenido_changelist")
         return super().response_change(request, obj)
@@ -208,9 +217,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 obj.publicador = request.user
         obj._change_reason = " "
         obj.save()
-        obj._change_reason = form.cleaned_data.get('change_reason')
-
-
+        obj._change_reason = form.cleaned_data.get("change_reason")
 
 
 @admin.register(Categoria)

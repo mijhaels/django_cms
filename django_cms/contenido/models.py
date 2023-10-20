@@ -35,7 +35,9 @@ class Contenido(models.Model):
     publicador = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="publicador", blank=True, null=True
     )  #: Publicador del contenido
-    historial = HistoricalRecords(history_change_reason_field=models.TextField(null=True))  #: Historial de cambios del contenido
+    historial = HistoricalRecords(
+        history_change_reason_field=models.TextField(null=True)
+    )  #: Historial de cambios del contenido
     change_reason = models.CharField(max_length=100, blank=True, null=True, verbose_name="Agregar comentario")
     categoria = models.ForeignKey(
         "Categoria", on_delete=models.CASCADE, related_name="categoria"

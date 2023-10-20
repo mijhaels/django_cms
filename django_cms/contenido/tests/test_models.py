@@ -30,4 +30,3 @@ class ContenidoModelTest(TestCase):
     def test_creacion_contenido(self):
         self.assertIsInstance(self.contenido, Contenido)
         self.assertEqual(self.contenido.__str__(), self.contenido.titulo)
-        

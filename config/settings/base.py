@@ -263,7 +263,7 @@ TINYMCE_DEFAULT_CONFIG = {
     "bold italic backcolor | alignleft aligncenter "
     "alignright alignjustify | bullist numlist outdent indent | "
     "removeformat | help",
-    "images_upload_url": '/contenido/subir',
+    "images_upload_url": "/contenido/subir",
 }
 
 # STORAGES

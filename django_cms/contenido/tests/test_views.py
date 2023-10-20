@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from .factories import ContenidoFactory
 
+
 class ContenidoDetalleViewTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -14,6 +15,7 @@ class ContenidoDetalleViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "pages/contenido_detalle.html")
         self.assertEqual(response.context["contenido"], self.contenido)
+
 
 class ContenidoBusquedaViewTest(TestCase):
     def setUp(self):
