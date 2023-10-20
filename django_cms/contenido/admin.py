@@ -15,7 +15,7 @@ class CategoriaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.esModerada:
+        if "autores_permitidos" in self.fields:
             self.fields["autores_permitidos"].required = not self.instance.esModerada
 
     def clean(self):
@@ -24,6 +24,9 @@ class CategoriaForm(forms.ModelForm):
         autores_permitidos = cleaned_data.get("autores_permitidos")
         if not esModerada and not autores_permitidos:
             self.add_error("autores_permitidos", "Este campo es requerido.")
+
+        if self.instance.esModerada:
+            self.fields["autores_permitidos"].required = not self.instance.esModerada
 
 class ContenidoAdminForm(forms.ModelForm):
     change_reason = forms.CharField(max_length=100, required=False, label="Agregar comentario")
@@ -66,6 +69,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         change_list = response.context_data["cl"]
         queryset = change_list.queryset
         user_groups = request.user.groups.values_list("name", flat=True)
+
         if "Autor" in user_groups:
             queryset = queryset.filter(autor=request.user)
         elif "Editor" in user_groups:
@@ -125,6 +129,12 @@ class ContenidoAdmin(SimpleHistoryAdmin):
     def contenido_display(self, obj):
         return mark_safe(obj.contenido)
 
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+            if db_field.name == "categoria":
+                kwargs["queryset"] = Categoria.objects.filter(Q(autores_permitidos=request.user) | Q(esModerada=True))
+            return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
     def change_view(self, request, object_id, form_url="", extra_context=None):
         extra_context = extra_context or {}
         contenido = Contenido.objects.get(pk=object_id)
@@ -132,7 +142,10 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         if "Autor" in user_groups and contenido.autor != request.user:
             raise PermissionError("No tiene permiso para ver este contenido.")
 
-        if "Autor" in user_groups and contenido.estado == 1:
+        if "Autor" in user_groups and contenido.estado == 1 and contenido.autor in contenido.categoria.autores_permitidos.all():
+            extra_context["show_button_publicar"] = True
+
+        if "Autor" in user_groups and contenido.estado == 1 and contenido.autor not in contenido.categoria.autores_permitidos.all():
             extra_context["show_button_revision"] = True
             
         if "Editor" in user_groups and contenido.estado == 5:
@@ -188,14 +201,20 @@ class ContenidoAdmin(SimpleHistoryAdmin):
 class CategoriaAdmin(SimpleHistoryAdmin):
     form = CategoriaForm
     list_display = ("titulo", "alias", "activo", "esModerada")
-    list_filter = ("titulo", "alias", "activo", "esModerada")
-    search_fields = ("titulo", "alias", "activo", "esModerada")
+    list_filter = ("activo", "esModerada")
+    search_fields = ("titulo", "alias")
     actions = (
         "activar_categorias",
         "desactivar_categorias",
         "hacer_moderadas_categorias",
         "hacer_no_moderadas_categorias",
     )
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        return queryset.filter(Q(autores_permitidos=request.user) | Q(esModerada=True))
 
     @admin.action(description="Hacer moderada/s categoría/s seleccionada/s")
     def hacer_moderadas_categorias(self, request, queryset):

@@ -6,7 +6,12 @@ from .models import Categoria, Contenido
 
 class ContenidoView(View):
     def get(self, request):
-        contenido_list = Contenido.objects.filter(activo=True, estado=4).order_by("-fechaCreacion")
+        # Si el usuario inicio sesión, se obtienen los contenidos de acuerdo a si está publico o no
+        if request.user.is_authenticated:
+            contenido_list = Contenido.objects.filter(activo=True, estado=4).order_by("-fechaCreacion")
+        # Si el usuario no inicio sesión, se obtienen los contenidos publicos
+        else:
+            contenido_list = Contenido.objects.filter(activo=True, esPublico=True, estado=4).order_by("-fechaCreacion")
         paginator = Paginator(contenido_list, 2)
 
         page_number = request.GET.get("page")
