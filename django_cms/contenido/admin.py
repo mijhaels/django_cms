@@ -89,6 +89,9 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         groups = request.user.groups.values_list("name", flat=True)
         readonly_fields = self.readonly_fields
 
+        if not obj:
+            return readonly_fields
+
         if obj.estado == 2 and "Editor" in groups:
             readonly_fields += (
                 "fechaVencimiento",
