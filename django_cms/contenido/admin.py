@@ -113,6 +113,16 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 "categoria",
             )
 
+        readonly_fields += (
+            "titulo",
+            "resumen",
+            "contenido",
+            "fechaVencimiento",
+            "esPublico",
+            "activo",
+            "categoria",
+            "change_reason",
+        )
         return readonly_fields
 
     def has_change_permission(self, request, obj=None):
@@ -124,6 +134,8 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         if obj.estado == 2 and "Editor" in groups:
             return True
         if obj.estado == 3 and "Publicador" in groups:
+            return True
+        if obj.estado ==5 and "Autor" in groups:
             return True
         return False
 
