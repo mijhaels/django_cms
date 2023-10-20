@@ -86,13 +86,22 @@
               {% endif %}
             </ul>
             <div class="d-flex align-items-center mx-auto">
-              <form class="navbar d-flex" role="search">
-                <input class="form-control me-2"
-                       type="search"
-                       placeholder="Buscar"
-                       aria-label="Search" />
+              <form class="navbar d-flex"
+                    role="search"
+                    action="{% url 'contenido:contenido_busqueda' %}"
+                    method="get">
+                <div>
+                  <input class="form-control me-2"
+                         type="search"
+                         width="100px"
+                         placeholder="Buscar"
+                         aria-label="Search"
+                         name="publicacion" />
+                </div>
+                <div class="ms-2">
+                  <button class="btn btn-outline-light w-100" type="submit">Buscar</button>
+                </div>
               </form>
-              <button class="btn btn-outline-light" type="submit">Buscar</button>
             </div>
             {% if request.user.is_staff %}
               <a id="admin-cms"

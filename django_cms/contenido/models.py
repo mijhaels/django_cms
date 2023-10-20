@@ -8,6 +8,7 @@ from django_cms.users.models import User
 
 class Contenido(models.Model):
     titulo = models.CharField(max_length=255, blank=False, null=False, verbose_name="Título")  #: Título del contenido
+    resumen = models.TextField(blank=True, null=True)
     contenido = HTMLField(
         blank=False, null=False, verbose_name="Descripción del contenido"
     )  #: Contenido de la publicación
@@ -34,7 +35,10 @@ class Contenido(models.Model):
     publicador = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="publicador", blank=True, null=True
     )  #: Publicador del contenido
-    historial = HistoricalRecords()  #: Historial de cambios del contenido
+    historial = HistoricalRecords(
+        history_change_reason_field=models.TextField(null=True)
+    )  #: Historial de cambios del contenido
+    change_reason = models.CharField(max_length=100, blank=True, null=True, verbose_name="Agregar comentario")
     categoria = models.ForeignKey(
         "Categoria", on_delete=models.CASCADE, related_name="categoria"
     )  #: Categoría del contenido
@@ -58,10 +62,10 @@ class Categoria(models.Model):
     esModerada = models.BooleanField(default=True, verbose_name="¿Es moderada?")  #: ¿Es moderada la categoría?
     historial = HistoricalRecords()  #: Historial de cambios de la categoría
     autores_permitidos = models.ManyToManyField(
-        User, related_name="categorias_autorizadas"
+        User, related_name="categorias_autorizadas", blank=True
     )  #: Autores permitidos para publicar en la categoría
 
-    def save(self, *args, **kwargs):  # Hola
+    def save(self, *args, **kwargs):
         if not self.activo:
             contenidos_activos = Contenido.objects.filter(
                 categoria=self, activo=True
