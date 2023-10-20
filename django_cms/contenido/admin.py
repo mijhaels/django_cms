@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.shortcuts import redirect
 from django.utils.safestring import mark_safe
 from simple_history.admin import SimpleHistoryAdmin
-
+from django.core.mail import send_mail
 from .models import Categoria, Contenido
 
 
@@ -185,6 +185,13 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 obj.estado = estado
                 obj.save()
                 self.message_user(request, f"El contenido ha sido enviado a {message}.")
+                send_mail(
+                'Estado del contenido',
+                f'El contenido {obj.titulo} ha sido enviado a {message}.',
+                None,
+                [obj.autor.email, obj.editor.email, obj.publicador.email],
+                fail_silently=False,
+                )
                 return redirect("admin:contenido_contenido_changelist")
         return super().response_change(request, obj)
 
