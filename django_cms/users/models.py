@@ -28,13 +28,3 @@ class User(AbstractUser):
         self.is_active = False
         self.save()
     
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        
-        # Se verifica si el usuario pertenece a alguno de los grupos especificados
-        group_names = [group.name for group in self.groups.all()]
-        if any(name in group_names for name in ["Autor", "Editor", "Publicador"]):
-            # Si es así, se le asigna el permiso is_staff
-            self.is_staff = True
-
-        super().save(*args, **kwargs)

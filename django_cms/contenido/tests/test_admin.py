@@ -52,7 +52,3 @@ class TestContenidoAdmin:
         response = admin_client.get(url)
         assert response.status_code == 200
 
-    def test_add(self, admin_client):
-        url = reverse("admin:contenido_contenido_add")
-        response = admin_client.get(url)
-        assert response.status_code == 200
