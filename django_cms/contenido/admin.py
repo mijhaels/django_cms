@@ -59,7 +59,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
     search_fields = ("titulo", "autor__username", "categoria__titulo")
     readonly_fields = ("fechaCreacion", "autor", "editor", "publicador", "estado")
     history_list_display = ["estado"]
-    excluded_fields = ["comment"]
+
 
     def estado(self, obj):
         return obj.get_estado_display()
@@ -85,51 +85,58 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         return super().changelist_view(request, extra_context=extra_context)
 
     def get_readonly_fields(self, request, obj=None):
-        groups = request.user.groups.values_list("name", flat=True)
-        readonly_fields = self.readonly_fields
-        if not obj:
-            return readonly_fields
+            groups = request.user.groups.values_list("name", flat=True)
+            readonly_fields = self.readonly_fields
 
-        if obj.estado == 1 and "Autor" in groups:
-            return readonly_fields
+            if obj.estado == 2 and "Editor" in groups:
+                readonly_fields += (
+                    "fechaVencimiento",
+                    "esPublico",
+                    "activo",
+                    "categoria",
+                )
 
-        if obj.estado == 2 and "Editor" in groups:
-            readonly_fields += (
+            obj.contenido = mark_safe(obj.contenido)
+
+            if obj.estado == 3 and "Publicador" in groups:
+                readonly_fields += (
+                "titulo",
+                "resumen",
+                "contenido",
                 "fechaVencimiento",
                 "esPublico",
                 "activo",
                 "categoria",
-            )
-            return readonly_fields
-        
-        obj.contenido = mark_safe(obj.contenido)
-        if obj.estado == 3 and "Publicador" in groups:
-            readonly_fields += (
-            "titulo",
-            "resumen",
-            "contenido",
-            "fechaVencimiento",
-            "esPublico",
-            "activo",
-            "categoria",
-            )
+                )
+
             return readonly_fields
 
-        readonly_fields += (
-            "titulo",
-            "resumen",
-            "contenido",
-            "fechaVencimiento",
-            "esPublico",
-            "activo",
-            "categoria",
-            "change_reason",
-        )
-        return readonly_fields
+    def has_change_permission(self, request, obj=None):
+        groups = request.user.groups.values_list("name", flat=True)
+        if not obj:
+            return True
+        if obj.estado == 1 and "Autor" in groups:
+            return True
+        if obj.estado == 2 and "Editor" in groups:
+            return True
+        if obj.estado == 3 and "Publicador" in groups:
+            return True
+        return False
+
+    def revert_disabled(self, request, obj=None):
+        groups = request.user.groups.values_list("name", flat=True)
+        history = getattr(obj, '_history', None)
+        estado = getattr(history, 'estado', None)
+        if not obj:
+            return False
+        if obj.estado == 1 and "Autor" in groups and estado == 1:
+            return False
+        if obj.estado == 2 and "Editor" in groups and estado == 2:
+            return False
+        return True
 
     def contenido_display(self, obj):
         return mark_safe(obj.contenido)
-
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
             if db_field.name == "categoria":
@@ -140,6 +147,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         extra_context = extra_context or {}
         contenido = Contenido.objects.get(pk=object_id)
         user_groups = request.user.groups.values_list("name", flat=True)
+
         if "Autor" in user_groups and contenido.autor != request.user:
             raise PermissionError("No tiene permiso para ver este contenido.")
 
@@ -148,7 +156,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
 
         if "Autor" in user_groups and contenido.estado == 1 and contenido.autor not in contenido.categoria.autores_permitidos.all():
             extra_context["show_button_revision"] = True
-            
+
         if "Editor" in user_groups and contenido.estado == 5:
             extra_context["show_button_revision"] = True
 
@@ -158,7 +166,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         if "Publicador" in user_groups and contenido.estado == 3:
             extra_context["show_button_publicar"] = True
             extra_context["show_button_rechazar"] = True
-        
+
         if "Autor" in user_groups and contenido.estado == 5:
             extra_context["show_button_borrador"] = True
 
@@ -166,7 +174,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
 
     def response_change(self, request, obj):
         actions = {
-            "_aBorrador": (1, "borrador"),  
+            "_aBorrador": (1, "borrador"),
             "_aRevision": (2, "revisión"),
             "_aPublicar": (3, "publicar"),
             "_aPublicado": (4, "publicado"),

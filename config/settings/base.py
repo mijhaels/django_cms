@@ -342,3 +342,5 @@ ANYMAIL = {
         "region_name": "sa-east-1",
     },
 }
+
+SIMPLE_HISTORY_ENFORCE_HISTORY_MODEL_PERMISSIONS = True

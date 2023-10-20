@@ -60,10 +60,10 @@ class Categoria(models.Model):
     esModerada = models.BooleanField(default=True, verbose_name="¿Es moderada?")  #: ¿Es moderada la categoría?
     historial = HistoricalRecords()  #: Historial de cambios de la categoría
     autores_permitidos = models.ManyToManyField(
-        User, related_name="categorias_autorizadas"
+        User, related_name="categorias_autorizadas", blank=True
     )  #: Autores permitidos para publicar en la categoría
 
-    def save(self, *args, **kwargs):  # Hola
+    def save(self, *args, **kwargs):
         if not self.activo:
             contenidos_activos = Contenido.objects.filter(
                 categoria=self, activo=True
