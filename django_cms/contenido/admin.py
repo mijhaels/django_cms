@@ -112,7 +112,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 "activo",
                 "categoria",
             )
-        
+
         if obj.estado == 5 and "Autor" or "Editor" in groups:
             readonly_fields += (
                 "titulo",
@@ -122,9 +122,8 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 "esPublico",
                 "activo",
                 "categoria",
-                "change_reason"
+                "change_reason",
             )
-
         return readonly_fields
 
     def has_change_permission(self, request, obj=None):
@@ -142,10 +141,6 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         if obj.estado == 5 and "Editor" in groups:
             return True
         return False
-
-        @property
-        def enforce_history_permissions(self):
-            return true
 
     def revert_disabled(self, request, obj=None):
         groups = request.user.groups.values_list("name", flat=True)
@@ -217,7 +212,7 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 obj.estado = estado
                 obj.save()
                 self.message_user(request, f"El contenido ha sido enviado a {message}.")
-                emails = [getattr(obj, role, None) for role in ['autor', 'editor', 'publicador']]
+                emails = [getattr(obj, role, None) for role in ["autor", "editor", "publicador"]]
                 emails = [rol.email for rol in emails if rol and rol.email]
 
                 if emails:
