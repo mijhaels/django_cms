@@ -17,6 +17,9 @@ urlpatterns = [
     path("cuentas/", include("allauth.urls")),
     path("tinymce/", include("tinymce.urls")),
     path("contenido/", include("django_cms.contenido.urls", namespace="contenido")),
+    path("comment/", include("comment.urls")),
+    path("reaction/", include("reaction.urls")),
+    path("rating/", include("rating.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

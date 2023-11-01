@@ -2,6 +2,10 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from simple_history.models import HistoricalRecords
 from tinymce.models import HTMLField
+from django.contrib.contenttypes.fields import GenericRelation
+from comment.models import Comment
+from reaction.models import Reaction
+from rating.models import Rating
 
 from django_cms.users.models import User
 
@@ -12,6 +16,9 @@ class Contenido(models.Model):
     contenido = HTMLField(
         blank=False, null=False, verbose_name="Descripción del contenido"
     )  #: Contenido de la publicación
+    comments = GenericRelation(Comment)
+    reactions = GenericRelation(Reaction)
+    ratings = GenericRelation(Rating)
     fechaCreacion = models.DateTimeField(
         auto_now_add=True, verbose_name="Fecha de creación"
     )  #: Fecha de creación del contenido
