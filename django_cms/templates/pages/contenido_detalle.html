@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% load comment_tags %}
+{% load reaction_tags %}
+{% load rating_tags %}
+
 {% block content %}
   <div class="container mt-5">
     <div class="col-md-8">
@@ -13,9 +17,21 @@
             <p>{{ contenido.categoria }}</p>
             <p>{{ contenido.autor }}</p>
             <p>Publicado el {{ contenido.fechaCreacion }}</p>
+            {% render_reaction_import %}
+  
+            {% render_reaction request obj=contenido settings_slug='default-config' %}
+  
+            {% render_reaction_script %}
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  {% render_rating_import %}
+  {% render_rating request=request obj=contenido settings_slug='default-config' %}
+  {% render_rating_info request=request obj=contenido settings_slug='default-config' %}
+  {% render_rating_script %}
+
+  {% render_comments request obj=contenido settings_slug='default-config' %}
 {% endblock content %}
