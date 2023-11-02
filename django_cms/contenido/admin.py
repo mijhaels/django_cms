@@ -212,6 +212,8 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         return super().response_change(request, obj)
 
     def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
         return False
 
     def save_model(self, request, obj, form, change):
