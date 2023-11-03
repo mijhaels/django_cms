@@ -68,11 +68,55 @@ Se utiliza para hacer linting de los archivos .html
       
    $ docker compose -f local.yml run --rm django djlint . --lint 
    
-Se utiliza para formatear todos los archivos .html
+Se utiliza para formatear todos los archivos .html
  .. code-block:: python
    
    $ docker compose -f local.yml run --rm django djlint . --reformat
 
+Ejecución de comandos de restauración de base de datos:
+----------------------------------------------------------------------
+A continuación se demuestran los comandos a ser utilizados para restaurar la base de datos
+
+Para crear un backup, se ejecuta el siguiente comando
+ .. code-block:: python
+   
+   $ docker compose -f local.yml exec postgres backup
+
+Para listar los backups existentes, se ejecuta el siguiente comando: 
+ .. code-block:: python
+   
+   $ docker compose -f local.yml exec postgres backups
+
+Para copiar backups de la base de datos localmente.
+
+Por ejemplo, dado 9c5c3f055843 es el ID del contenedor copiar todas las copias de seguridad a un directorio local, se ejecuta el siguiente comando:
+ .. code-block:: python
+   
+   $ docker cp 9c5c3f055843:/backups ./backups
+
+Para restaurar un backup existente, se ejecuta el siguiente comando:
+ .. code-block:: python
+   
+   $ docker compose -f local.yml exec postgres restore backup_2023_03_13T09_05_07.sql.gz
+
+Ejecución de comandos de pruebas unitarias:
+----------------------------------------------------------------------
+A continuación se demuestran los comandos a ser utilizados para las pruebas unitarias
+
+Para ejecutar las pruebas unitarias, se ejecuta el siguiente comando:
+ .. code-block:: python
+   
+   $ docker compose -f local.yml run --rm django pytest
+
+Puede ejecutar el pytest con cobertura de código escribiendo el siguiente comando:
+ .. code-block:: python
+      
+   $ docker compose -f local.yml run --rm django coverage run -m pytest
+
+Para ver el informe de cobertura de código, se ejecuta el siguiente comando:
+ .. code-block:: python
+      
+   $ docker compose -f local.yml run --rm django coverage report
 .. 
    :members:
    :noindex:
