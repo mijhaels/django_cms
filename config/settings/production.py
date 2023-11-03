@@ -48,6 +48,15 @@ SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
 # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
 SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)
 
+# STATIC
+# ------------------------
+STATICFILES_STORAGE = "django_cms.utils.storages.StaticRootS3Boto3Storage"
+COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
+STATIC_URL = f"https://{aws_s3_domain}/static/"
+
+# MEDIA
+# ------------------------------------------------------------------------------
+MEDIA_URL = f"https://{aws_s3_domain}/media/"
 
 # ADMIN
 # ------------------------------------------------------------------------------
