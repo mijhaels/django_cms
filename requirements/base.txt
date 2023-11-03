@@ -17,3 +17,6 @@ django-tinymce==3.6.1 # https://github.com/jazzband/django-tinymce
 django-simple-history==3.4.0 # https://django-simple-history.readthedocs.io/en/latest/index.html
 django-storages[boto3]==1.13.2  # https://github.com/jschneier/django-storages
 django-anymail[amazon-ses]==10.1  # https://github.com/anymail/django-anymail
+django-comment-system==2.10.4  # https://github.com/mahyar-amiri/django-comment-system.git
+django-reaction-system==1.1.1 # https://github.com/mahyar-amiri/django-reaction-system.git
+django-rating-system==1.1.1 # https://github.com/mahyar-amiri/django-rating-system.git

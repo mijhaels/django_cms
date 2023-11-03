@@ -36,7 +36,9 @@ class ContenidoDetalleView(View):
 
 class ContenidoBusquedaView(View):
     def get(self, request):
+        termino = None
         # Obtiene los parámetros de búsqueda
+
         publicacion = request.GET.get("publicacion")
         autor = request.GET.get("autor")
         categoria = request.GET.get("categoria")

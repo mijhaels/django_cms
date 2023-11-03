@@ -1,5 +1,9 @@
+from comment.models import Comment
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
+from rating.models import Rating
+from reaction.models import Reaction
 from simple_history.models import HistoricalRecords
 from tinymce.models import HTMLField
 
@@ -8,10 +12,13 @@ from django_cms.users.models import User
 
 class Contenido(models.Model):
     titulo = models.CharField(max_length=255, blank=False, null=False, verbose_name="Título")  #: Título del contenido
-    resumen = models.TextField(blank=True, null=True)
+    resumen = models.TextField(blank=True, null=True)  #: Resumen del contenido
     contenido = HTMLField(
         blank=False, null=False, verbose_name="Descripción del contenido"
     )  #: Contenido de la publicación
+    comments = GenericRelation(Comment)  #: Comentarios del contenido
+    reactions = GenericRelation(Reaction)  #: Reacciones del contenido
+    ratings = GenericRelation(Rating)  #: Calificaciones del contenido
     fechaCreacion = models.DateTimeField(
         auto_now_add=True, verbose_name="Fecha de creación"
     )  #: Fecha de creación del contenido
@@ -26,7 +33,7 @@ class Contenido(models.Model):
         (3, "A publicar"),
         (4, "Publicado"),
         (5, "Rechazado"),
-    ]
+    ]  #: Estados del contenido
     estado = models.IntegerField(choices=estados, default=1)  #: Estado del contenido
     autor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="autor")  #: Autor del contenido
     editor = models.ForeignKey(
@@ -38,7 +45,9 @@ class Contenido(models.Model):
     historial = HistoricalRecords(
         history_change_reason_field=models.TextField(null=True)
     )  #: Historial de cambios del contenido
-    change_reason = models.CharField(max_length=100, blank=True, null=True, verbose_name="Agregar comentario")
+    change_reason = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Agregar comentario"
+    )  #: Comentario de cambio del contenido
     categoria = models.ForeignKey(
         "Categoria", on_delete=models.CASCADE, related_name="categoria"
     )  #: Categoría del contenido
@@ -57,7 +66,7 @@ class Categoria(models.Model):
         null=False,
         verbose_name="Alias",
         help_text="Ejemplo: 'Ingeniería de Software II' -> 'is2'",
-    )
+    )  #: Alias de la categoría
     activo = models.BooleanField(default=True, verbose_name="¿Está activo?")  #: ¿Está activa la categoría?
     esModerada = models.BooleanField(default=True, verbose_name="¿Es moderada?")  #: ¿Es moderada la categoría?
     historial = HistoricalRecords()  #: Historial de cambios de la categoría
@@ -66,10 +75,9 @@ class Categoria(models.Model):
     )  #: Autores permitidos para publicar en la categoría
 
     def save(self, *args, **kwargs):
+        """Valida que no se pueda desactivar una categoría que tenga contenidos activos."""
         if not self.activo:
-            contenidos_activos = Contenido.objects.filter(
-                categoria=self, activo=True
-            )  #: Contenidos activos de la categoría
+            contenidos_activos = Contenido.objects.filter(categoria=self, activo=True)
             if contenidos_activos.exists():
                 raise ValidationError(
                     "No se puede desactivar una categoría que tenga contenidos activos.",

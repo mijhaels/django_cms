@@ -113,6 +113,26 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 "categoria",
             )
 
+        if obj.estado == 5 and ("Autor" or "Editor" in groups):
+            readonly_fields += (
+                "titulo",
+                "resumen",
+                "contenido",
+                "fechaVencimiento",
+                "esPublico",
+                "activo",
+                "categoria",
+                "change_reason",
+            )
+        url_actual = request.resolver_match.url_name
+        tieneHistorial = getattr(obj, "_history", None)
+        if (
+            self.has_view_history_permission(request, obj)
+            and tieneHistorial
+            and url_actual == "contenido_contenido_simple_history"
+        ):
+            readonly_fields = self.fields
+
         return readonly_fields
 
     def has_change_permission(self, request, obj=None):
@@ -125,18 +145,50 @@ class ContenidoAdmin(SimpleHistoryAdmin):
             return True
         if obj.estado == 3 and "Publicador" in groups:
             return True
+        if obj.estado == 5 and "Autor" in groups:
+            return True
+        if obj.estado == 5 and "Editor" in groups:
+            return True
         return False
 
     def revert_disabled(self, request, obj=None):
-        groups = request.user.groups.values_list("name", flat=True)
-        history = getattr(obj, "_history", None)
-        estado = getattr(history, "estado", None)
         if not obj:
             return False
-        if obj.estado == 1 and "Autor" in groups and estado == 1:
-            return False
-        if obj.estado == 2 and "Editor" in groups and estado == 2:
-            return False
+
+        roles = set(request.user.groups.values_list("name", flat=True))
+        obj_actual = Contenido.objects.get(pk=obj.pk)
+        estado_obj_historial = obj.estado
+        estado_obj_actual = obj_actual.estado
+        url_actual = request.resolver_match.url_name
+
+        if (
+            estado_obj_historial == estado_obj_actual
+            and estado_obj_historial in {1, 2}
+            and url_actual == "contenido_contenido_simple_history"
+        ):
+            fecha_modificacion_historial = obj._history.history_date
+            fecha_modificacion_borradores = Contenido.historial.filter(
+                titulo=obj.titulo, estado=1, autor=obj.autor
+            ).order_by("-history_date")
+            fecha_modificacion_ultimo_borrador = (
+                fecha_modificacion_borradores[1].history_date
+                if estado_obj_actual == 1
+                else fecha_modificacion_borradores[0].history_date
+            )
+
+            if (
+                fecha_modificacion_historial > fecha_modificacion_ultimo_borrador
+                and estado_obj_historial == 1
+                and "Autor" in roles
+            ):
+                return False
+            elif (
+                fecha_modificacion_historial > fecha_modificacion_ultimo_borrador
+                and estado_obj_historial == 2
+                and "Editor" in roles
+            ):
+                return False
+
         return True
 
     def contenido_display(self, obj):
@@ -197,8 +249,8 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 obj.estado = estado
                 obj.save()
                 self.message_user(request, f"El contenido ha sido enviado a {message}.")
-                emails = [getattr(obj, role, None) for role in ['autor', 'editor', 'publicador']]
-                emails = [rol.email for rol in emails if rol]
+                emails = [getattr(obj, role, None) for role in ["autor", "editor", "publicador"]]
+                emails = [rol.email for rol in emails if rol and rol.email]
 
                 if emails:
                     send_mail(
@@ -212,6 +264,8 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         return super().response_change(request, obj)
 
     def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
         return False
 
     def save_model(self, request, obj, form, change):
