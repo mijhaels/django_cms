@@ -7,7 +7,6 @@ from django.utils.safestring import mark_safe
 from simple_history.admin import SimpleHistoryAdmin
 
 from .models import Categoria, Contenido
-from django.contrib.admin.utils import flatten_fieldsets
 
 
 class CategoriaForm(forms.ModelForm):
@@ -127,7 +126,11 @@ class ContenidoAdmin(SimpleHistoryAdmin):
             )
         url_actual = request.resolver_match.url_name
         tieneHistorial = getattr(obj, "_history", None)
-        if self.has_view_history_permission(request, obj) and tieneHistorial and url_actual == "contenido_contenido_simple_history":
+        if (
+            self.has_view_history_permission(request, obj)
+            and tieneHistorial
+            and url_actual == "contenido_contenido_simple_history"
+        ):
             readonly_fields = self.fields
 
         return readonly_fields
@@ -158,14 +161,32 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         estado_obj_actual = obj_actual.estado
         url_actual = request.resolver_match.url_name
 
-        if estado_obj_historial == estado_obj_actual and estado_obj_historial in {1, 2} and url_actual == "contenido_contenido_simple_history":
+        if (
+            estado_obj_historial == estado_obj_actual
+            and estado_obj_historial in {1, 2}
+            and url_actual == "contenido_contenido_simple_history"
+        ):
             fecha_modificacion_historial = obj._history.history_date
-            fecha_modificacion_borradores = Contenido.historial.filter(titulo=obj.titulo, estado=1, autor=obj.autor).order_by("-history_date")
-            fecha_modificacion_ultimo_borrador = fecha_modificacion_borradores[1].history_date if estado_obj_actual == 1 else fecha_modificacion_borradores[0].history_date
+            fecha_modificacion_borradores = Contenido.historial.filter(
+                titulo=obj.titulo, estado=1, autor=obj.autor
+            ).order_by("-history_date")
+            fecha_modificacion_ultimo_borrador = (
+                fecha_modificacion_borradores[1].history_date
+                if estado_obj_actual == 1
+                else fecha_modificacion_borradores[0].history_date
+            )
 
-            if fecha_modificacion_historial > fecha_modificacion_ultimo_borrador and estado_obj_historial == 1 and "Autor" in roles:
+            if (
+                fecha_modificacion_historial > fecha_modificacion_ultimo_borrador
+                and estado_obj_historial == 1
+                and "Autor" in roles
+            ):
                 return False
-            elif fecha_modificacion_historial > fecha_modificacion_ultimo_borrador and estado_obj_historial == 2 and "Editor" in roles:
+            elif (
+                fecha_modificacion_historial > fecha_modificacion_ultimo_borrador
+                and estado_obj_historial == 2
+                and "Editor" in roles
+            ):
                 return False
 
         return True

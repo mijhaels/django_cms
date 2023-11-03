@@ -36,8 +36,6 @@ class ContenidoDetalleView(View):
 
 class ContenidoBusquedaView(View):
     def get(self, request):
-
-
         termino = None
         # Obtiene los parámetros de búsqueda
 
@@ -45,7 +43,6 @@ class ContenidoBusquedaView(View):
         autor = request.GET.get("autor")
         categoria = request.GET.get("categoria")
         fechaCreacion = request.GET.get("fechaCreacion")
-        
 
         # Obtiene todos los contenidos activos
         contenido_list = Contenido.objects.filter(activo=True, estado=4)

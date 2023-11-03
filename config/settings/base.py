@@ -335,79 +335,65 @@ SIMPLE_HISTORY_ENFORCE_HISTORY_MODEL_PERMISSIONS = True
 
 COMMENT_SETTINGS = {
     # generated urlhash length
-    'URLHASH_LENGTH': 8,
-
+    "URLHASH_LENGTH": 8,
     # if True, tailwindcss and jquery package will be loaded from static files.
-    'OFFLINE_IMPORTS': True,
-
+    "OFFLINE_IMPORTS": True,
     # if None, comments will be shown without profile image
     # you should set this value as profile image field name
     # for example our abstract user profile picture field is profile_image
     # <img src="{{ user.profile_image.url }}" /> so we set PROFILE_IMAGE_FIELD = 'profile.image'
     # see link blew to create abstract user model
     # https://docs.djangoproject.com/en/4.1/topics/auth/customizing/#substituting-a-custom-user-model
-    'PROFILE_IMAGE_FIELD': None,
+    "PROFILE_IMAGE_FIELD": None,
     # default profile image static path
-    'PROFILE_IMAGE_DEFAULT': 'img/profile.png'
+    "PROFILE_IMAGE_DEFAULT": "img/profile.png",
 }
 
 # Configuraciones de los comentarios
 COMMENTS_APP = {
     # Los comentarios necesitan ser aceptados para ser mostrados en la lista de comentarios.
-    # Si es True, el estado del comentario se establecerá como entregado, de lo contrario, se establecerá como aceptado.
-    'STATUS_CHECK': False,
-
+    "STATUS_CHECK": False,
     # Activar el modo de comentario de spoiler
-    'ALLOW_SPOILER': True,
-
+    "ALLOW_SPOILER": True,
     # Permitir a los usuarios responder a un comentario
-    'ALLOW_REPLY': True,
-
+    "ALLOW_REPLY": True,
     # Permitir a los usuarios editar su comentario
-    'ALLOW_EDIT': True,
-
+    "ALLOW_EDIT": True,
     # Permitir a los usuarios eliminar su comentario
-    'ALLOW_DELETE': True,
-
+    "ALLOW_DELETE": True,
     # Más de este valor tendrá el botón Leer más en el contenido del comentario
-    'CONTENT_WORDS_COUNT': 40,
-
+    "CONTENT_WORDS_COUNT": 40,
     # Permitir a los usuarios reaccionar a un comentario
-    'ALLOW_REACTION': True,
-
+    "ALLOW_REACTION": True,
     # Obtener emoji o de la fuente del archivo
-    'REACTION_TYPE': 'emoji',  # emoji / source
-
+    "REACTION_TYPE": "emoji",  # emoji / source
     # Número de comentarios por página
     # Establecer en 0 si no quieres paginación
-    'PER_PAGE': 10,
-
-    'TIME_TYPE': 1,  # 1.ambos 2.desde_ahora 3.fecha_hora
-    'TIME_DAYS': 3,  # menos usará el tipo 2, más usará el tipo 3
-
+    "PER_PAGE": 10,
+    "TIME_TYPE": 1,  # 1.ambos 2.desde_ahora 3.fecha_hora
+    "TIME_DAYS": 3,  # menos usará el tipo 2, más usará el tipo 3
     # Establecer la dirección de la sección de comentarios
-    'THEME_DIRECTION': 'ltr',  # ltr / rtl
-
+    "THEME_DIRECTION": "ltr",  # ltr / rtl
     # Establecer True para el modo oscuro
-    'THEME_DARK_MODE': False,
+    "THEME_DARK_MODE": False,
 }
 
 REACTION_SETTINGS = {
     # generated urlhash length
-    'URLHASH_LENGTH': 8,
+    "URLHASH_LENGTH": 8,
     # if True, tailwindcss and jquery package will be loaded from static files.
-    'OFFLINE_IMPORTS': True
+    "OFFLINE_IMPORTS": True,
 }
 
-REACT_TYPE = 'e'  # 'e' for emoji and 's' for source
-REACT_EMOJI = ['👍', '👎', '❤️'] # List of allowed emojis linked to React model
+REACT_TYPE = "e"  # 'e' for emoji and 's' for source
+REACT_EMOJI = ["👍", "👎", "❤️"]  # List of allowed emojis linked to React model
 
 RATING_SETTINGS = {
     # generated urlhash length
-    'URLHASH_LENGTH': 8
+    "URLHASH_LENGTH": 8
 }
 
 FROM_ZERO = True  # if True, Rating will start from 0 otherwise 1
 RATES = 5  # 1, 3, 5, 10
-ICON = 'fas fa-star'  # path of rating icon
-HEIGHT = '2rem'  # Height of icon with unit
+ICON = "fas fa-star"  # path of rating icon
+HEIGHT = "2rem"  # Height of icon with unit
