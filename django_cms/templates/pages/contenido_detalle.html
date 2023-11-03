@@ -5,41 +5,32 @@
 {% load rating_tags %}
 
 {% block content %}
-<div class="container mt-5">
+  <div class="container mt-5">
     <div class="col-md-8">
-        <div class="card mb-3 bg-light ">
-            <div class="row g-0">
-                <div class="card-header text-center bg-primary text-white">{{ contenido.titulo }}</div>
-                <div class="card-body">
-                    <p>{{ contenido.contenido|safe }}</p>
-                </div>
-                <div class="card-footer text-body-secondary bg-light  text-end">
-                    <p>{{ contenido.categoria }}</p>
-                    <p>{{ contenido.autor }}</p>
-                    <p>Publicado el {{ contenido.fechaCreacion }}</p>
-                    {% render_reaction_import %}
-
-                    {% render_reaction request obj=contenido settings_slug='default-config' %}
-
-                    {% render_reaction_script %}
-                </div>
-            </div>
+      <div class="card mb-3 bg-light ">
+        <div class="row g-0">
+          <div class="card-header text-center bg-primary text-white">{{ contenido.titulo }}</div>
+          <div class="card-body">
+            <p>{{ contenido.contenido|safe }}</p>
+          </div>
+          <div class="card-footer text-body-secondary bg-light  text-end">
+            <p>{{ contenido.categoria }}</p>
+            <p>{{ contenido.autor }}</p>
+            <p>Publicado el {{ contenido.fechaCreacion }}</p>
+            {% render_reaction_import %}
+            {% render_reaction request obj=contenido settings_slug='default-config' %}
+            {% render_reaction_script %}
+          </div>
         </div>
-        {% render_rating_import %}
-        <div class="d-flex justify-content-between">
-            <div>
-                {% render_rating request=request obj=contenido settings_slug='default-config' %}
-            </div>
-            <div>
-                {% render_rating_info request=request obj=contenido settings_slug='default-config' %}
-            </div>
-        </div>
-        
-        {% render_rating_script %} <br>
-
-        {% render_comments request obj=contenido settings_slug='default-config' %}
+      </div>
+      {% render_rating_import %}
+      <div class="d-flex justify-content-between">
+        <div>{% render_rating request=request obj=contenido settings_slug='default-config' %}</div>
+        <div>{% render_rating_info request=request obj=contenido settings_slug='default-config' %}</div>
+      </div>
+      {% render_rating_script %}
+      <br />
+      {% render_comments request obj=contenido settings_slug='default-config' %}
     </div>
-</div>
-
+  </div>
 {% endblock content %}
-

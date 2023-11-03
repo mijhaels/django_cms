@@ -2,22 +2,16 @@
 {% load comment_tags %}
 
 {% render_comment_import %}
-
-<div {% if settings.theme_dark_mode %} data-mode="dark" {% endif %} dir="{{ settings.theme_direction }}">
-    <div id="comments" class="py-2 px-2" style="background-color: #fff">
-
-        {# COMMENT MODAL #}
-        <div id="comment-modal"></div>
-
-        {# CREATE COMMENT FORM #}
-        {% include 'comment/forms/comment_form_create.html' with settings=settings %}
-
-        {# COMMENTS LIST #}
-        <div id="comment-list">
-            {% include 'comment/utils/comment_list_loader.html' %}
-        </div>
-
-    </div>
+<div {% if settings.theme_dark_mode %}data-mode="dark"{% endif %}
+     dir="{{ settings.theme_direction }}">
+  <div id="comments" class="py-2 px-2" style="background-color: #fff">
+    {# COMMENT MODAL #}
+    <div id="comment-modal"></div>
+    {# CREATE COMMENT FORM #}
+    {% include 'comment/forms/comment_form_create.html' with settings=settings %}
+    {# COMMENTS LIST #}
+    <div id="comment-list">{% include 'comment/utils/comment_list_loader.html' %}</div>
+  </div>
 </div>
 {% include 'comment/utils/toast.html' %}
 {% include 'comment/utils/SCRIPTS.html' %}

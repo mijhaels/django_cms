@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% load static %}
+
 {% block content %}
   <div class="container mt-5">
     <div class="row">
-      <div class="col-md-8 ">                      
-        <h3 class="text-secondary ">Resultados de {{ termino }} </h3>
+      <div class="col-md-8 ">
+        <h3 class="text-secondary ">Resultados de {{ termino }}</h3>
         <ul class="nav nav-pills my-3">
           <li class="nav-item">
             <a class="nav-link btn btn-primary"
@@ -64,24 +65,29 @@
               </div>
             </div>
           {% endfor %}
-          {% else %}
+        {% else %}
           <div class="d-flex justify-content-center">
             <div class="card mb-3" style="max-width: 540px; border: none;">
               <div class="row g-0">
                 <div class="col-md-4 d-flex align-items-center justify-content-center">
-                  <img src="{% static 'images/gatito_error.jpg' %}" class="img-fluid" alt="Gatito de busqueda" style="max-width: 200px; height: auto; border: none;">
+                  <img src="{% static 'images/gatito_error.jpg' %}"
+                       class="img-fluid"
+                       alt="Gatito de busqueda"
+                       style="max-width: 200px;
+                              height: auto;
+                              border: none" />
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
-                    <br> <br>
+                    <br />
+                    <br />
                     <h5 class="card-title text-center pr-5">No hay resultados, por favor inténtelo nuevamente.</h5>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {% endif %}
-        
+        {% endif %}
       </div>
     </div>
   </div>
@@ -96,17 +102,16 @@
       {% endif %}
       {% for i in page_obj.paginator.page_range %}
         <li class="page-item{% if page_obj.number == i %} active{% endif %}">
-          <a class="page-link" href="?page={{ i }}{% if request.GET.publicacion %}&publicacion={{ request.GET.publicacion }}{% endif %}{% if request.GET.autor %}&autor={{ request.GET.autor }}{% endif %}{% if request.GET.categoria %}&categoria={{ request.GET.categoria }}{% endif %}{% if request.GET.fechaCreacion %}&fechaCreacion={{ request.GET.fechaCreacion }}{% endif %}">{{ i }}</a>
+          <a class="page-link"
+             href="?page={{ i }}{% if request.GET.publicacion %}&publicacion={{ request.GET.publicacion }}{% endif %}{% if request.GET.autor %}&autor={{ request.GET.autor }}{% endif %}{% if request.GET.categoria %}&categoria={{ request.GET.categoria }}{% endif %}{% if request.GET.fechaCreacion %}&fechaCreacion={{ request.GET.fechaCreacion }}{% endif %}">{{ i }}</a>
         </li>
       {% endfor %}
       {% if page_obj.has_next %}
         <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.publicacion %}&publicacion={{ request.GET.publicacion }}{% endif %}{% if request.GET.autor %}&autor={{ request.GET.autor }}{% endif %}{% if request.GET.categoria %}&categoria={{ request.GET.categoria }}{% endif %}{% if request.GET.fechaCreacion %}&fechaCreacion={{ request.GET.fechaCreacion }}{% endif %}">Siguiente</a>
+          <a class="page-link"
+             href="?page={{ page_obj.next_page_number }}{% if request.GET.publicacion %}&publicacion={{ request.GET.publicacion }}{% endif %}{% if request.GET.autor %}&autor={{ request.GET.autor }}{% endif %}{% if request.GET.categoria %}&categoria={{ request.GET.categoria }}{% endif %}{% if request.GET.fechaCreacion %}&fechaCreacion={{ request.GET.fechaCreacion }}{% endif %}">Siguiente</a>
         </li>
       {% endif %}
     </ul>
   </nav>
-  
 {% endblock content %}
-
-

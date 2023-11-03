@@ -27,7 +27,6 @@
     ================================================== -->
     {# Placed at the top of the document so pages load faster with defer #}
     {% block javascript %}
- 
       <script defer
               src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
               integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
@@ -37,7 +36,7 @@
       <script defer src="{% static 'js/project.js' %}"></script>
     {% endblock javascript %}
   </head>
-  <body>     
+  <body>
     <div class="mb-1">
       <nav class="navbar navbar-expand-md navbar-light bg-secondary">
         <div class="container-fluid">
@@ -90,44 +89,41 @@
                     role="search"
                     action="{% url 'contenido:contenido_busqueda' %}"
                     method="get">
-                    <div>
-                      <input class="form-control me-2"
-                          type="search"
-                          width="100px"
-                          placeholder="Buscar"
-                          aria-label="Search"
-                          name="publicacion"
-                          id="search-input" />
-                  </div>
-                  <div class="ms-2">
-                      <button class="btn btn-outline-light w-100" type="submit">Buscar</button>
-                  </div>
-                  </form>
-                  </div>
+                <div>
+                  <input class="form-control me-2"
+                         type="search"
+                         width="100px"
+                         placeholder="Buscar"
+                         aria-label="Search"
+                         name="publicacion"
+                         id="search-input" />
+                </div>
+                <div class="ms-2">
+                  <button class="btn btn-outline-light w-100" type="submit">Buscar</button>
+                </div>
+              </form>
+            </div>
+            <script type="text/javascript">
+              document.addEventListener("DOMContentLoaded", function() {
+                // Obten el valor del campo de búsqueda del parámetro en la URL
+                var searchTerm = "";
 
-                  <script type="text/javascript">
-                    document.addEventListener("DOMContentLoaded", function() {
-                      // Obten el valor del campo de búsqueda del parámetro en la URL
-                      var searchTerm = "";
-                      
-                      // Comprueba el parámetro en la URL y establece el valor del campo de búsqueda según corresponda
-                      if ("{{ request.GET.publicacion }}" !== "") {
-                        searchTerm = "{{ request.GET.publicacion }}";
-                      } else if ("{{ request.GET.autor }}" !== "") {
-                        searchTerm = "{{ request.GET.autor }}";
-                      } else if ("{{ request.GET.categoria }}" !== "") {
-                        searchTerm = "{{ request.GET.categoria }}";
-                      }
-                      
-                      // Establece el valor del campo de búsqueda con el valor recuperado
-                      var searchInput = document.getElementById("search-input");
-                      if (searchInput) {
-                        searchInput.value = searchTerm;
-                      }
-                    });
-                  </script>
-                  
-                  
+                // Comprueba el parámetro en la URL y establece el valor del campo de búsqueda según corresponda
+                if ("{{ request.GET.publicacion }}" !== "") {
+                  searchTerm = "{{ request.GET.publicacion }}";
+                } else if ("{{ request.GET.autor }}" !== "") {
+                  searchTerm = "{{ request.GET.autor }}";
+                } else if ("{{ request.GET.categoria }}" !== "") {
+                  searchTerm = "{{ request.GET.categoria }}";
+                }
+
+                // Establece el valor del campo de búsqueda con el valor recuperado
+                var searchInput = document.getElementById("search-input");
+                if (searchInput) {
+                  searchInput.value = searchTerm;
+                }
+              });
+            </script>
             {% if request.user.is_staff %}
               <a id="admin-cms"
                  class="nav-link btn btn-secondary text-white p-1 ms-auto "

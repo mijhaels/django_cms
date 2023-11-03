@@ -1,12 +1,11 @@
 {% extends "registration/logged_out.html" %}
 
 {% block breadcrumbs %}
-<div class="breadcrumbs">
+  <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">Inicio</a>
     {% if site_url %}
-        <span style="color:white">/</span>
-        <a href="{{ site_url }}">Visitar Sitio</a>
+      <span style="color:white">/</span>
+      <a href="{{ site_url }}">Visitar Sitio</a>
     {% endif %}
-</div>
-{% endblock %}
-
+  </div>
+{% endblock breadcrumbs %}

@@ -1,13 +1,25 @@
 {% extends 'rating/info/info_base.html' %}
+
 {% block main %}
-    <div style="font-size: 1em">
-        <span>Tu calificación:
-            {% if request.user.is_authenticated %}
-                {% if rate is not None %}{{ rate }}/{{ settings.rates }}{% else %}-{% endif %}
-            {% else %}
-                <a href="{% url 'admin:login' %}">Inicia sesión</a>
-            {% endif %}
-        </span> <br>
-        <span>Promedio: {% if count %}{{ average }}/{{ settings.rates }}{% else %}-{% endif %}</span>
-    </div>
-{% endblock %}
+  <div style="font-size: 1em">
+    <span>Tu calificación:
+      {% if request.user.is_authenticated %}
+        {% if rate is not None %}
+          {{ rate }}/{{ settings.rates }}
+        {% else %}
+          -
+        {% endif %}
+      {% else %}
+        <a href="{% url 'admin:login' %}">Inicia sesión</a>
+      {% endif %}
+    </span>
+    <br />
+    <span>Promedio:
+      {% if count %}
+        {{ average }}/{{ settings.rates }}
+      {% else %}
+        -
+      {% endif %}
+    </span>
+  </div>
+{% endblock main %}
