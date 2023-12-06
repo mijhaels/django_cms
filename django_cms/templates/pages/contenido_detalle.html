@@ -5,32 +5,85 @@
 {% load rating_tags %}
 
 {% block content %}
-  <div class="container mt-5">
-    <div class="col-md-8">
-      <div class="card mb-3 bg-light ">
-        <div class="row g-0">
-          <div class="card-header text-center bg-primary text-white">{{ contenido.titulo }}</div>
-          <div class="card-body">
-            <p>{{ contenido.contenido|safe }}</p>
-          </div>
-          <div class="card-footer text-body-secondary bg-light  text-end">
-            <p>{{ contenido.categoria }}</p>
-            <p>{{ contenido.autor }}</p>
-            <p>Publicado el {{ contenido.fechaCreacion }}</p>
-            {% render_reaction_import %}
-            {% render_reaction request obj=contenido settings_slug='default-config' %}
-            {% render_reaction_script %}
-          </div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl, { autohide: true, delay: 2500 }) 
+        })
+
+        document.getElementById('copy-btn').addEventListener('click', function () {
+            var url = '{{ contenido.get_absolute_url }}';
+            navigator.clipboard.writeText(url).then(function () {
+                console.log('Enlace copiado al portapapeles');
+                toastList[0].show();
+            }, function () {
+                console.log('Error al copiar el enlace');
+                // Manejo del error aquí
+            });
+        });
+    });
+
+</script>
+
+<div class="toast align-items-center text-bg-light position-fixed top-0 start-50 translate-middle-x" role="alert"
+    aria-live="assertive" aria-atomic="true" style="z-index: 9999;">
+    <div class="d-flex">
+        <div class="toast-body">
+            Enlace copiado al portapapeles.
         </div>
-      </div>
-      {% render_rating_import %}
-      <div class="d-flex justify-content-between">
-        <div>{% render_rating request=request obj=contenido settings_slug='default-config' %}</div>
-        <div>{% render_rating_info request=request obj=contenido settings_slug='default-config' %}</div>
-      </div>
-      {% render_rating_script %}
-      <br />
-      {% render_comments request obj=contenido settings_slug='default-config' %}
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+            aria-label="Close"></button>
     </div>
-  </div>
+</div>
+
+<div class="container mt-5">
+    <div class="col-md-8">
+        <div class="card mb-3 bg-light ">
+            <div class="row g-0">
+                <div class="card-header text-center bg-primary text-white">{{ contenido.titulo }}</div>
+                <div class="card-body">
+                    <p>{{ contenido.contenido|safe }}</p>
+                </div>
+                <div class="card-footer text-body-secondary bg-light d-flex justify-content-between align-items-center">
+                    <div>
+                        <p>{{ contenido.categoria }}</p>
+                        <p>{{ contenido.autor }}</p>
+                        <p>Publicado el {{ contenido.fechaCreacion }}</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        {% render_reaction_import %}
+                        {% render_reaction request obj=contenido settings_slug='default-config' %}
+                        {% render_reaction_script %}
+                        <div class="ms-auto">
+                            <div class="dropdown">
+                                <a href="#" class="text-dark" role="button" id="dropdownMenuLink"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-box-arrow-up" style="font-size: 1.5rem;"></i>
+                                </a>
+                                <ul class="dropdown-menu text-bg-light" aria-labelledby="dropdownMenuLink"
+                                    style="position: absolute; right: 0;">
+                                    <!-- Dropdown menu links -->
+                                    <li class="text-center"><button id="copy-btn">Copiar enlace</button></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% render_rating_import %}
+        <div class="d-flex justify-content-between">
+            <div>{% render_rating request=request obj=contenido settings_slug='default-config' %}</div>
+            <div>{% render_rating_info request=request obj=contenido settings_slug='default-config' %}</div>
+        </div>
+        {% render_rating_script %}
+        <br />
+        {% render_comments request obj=contenido settings_slug='default-config' %}
+    </div>
+</div>
 {% endblock content %}
