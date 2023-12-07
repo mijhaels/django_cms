@@ -53,9 +53,6 @@ class Contenido(models.Model):
         "Categoria", on_delete=models.CASCADE, related_name="categoria"
     )  #: Categoría del contenido
 
-    def get_absolute_url(self):
-        return reverse('contenido:contenido_detalle', args=[str(self.id)])
-
     def __str__(self):
         return self.titulo
 

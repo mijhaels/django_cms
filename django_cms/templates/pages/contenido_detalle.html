@@ -13,11 +13,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         var toastElList = [].slice.call(document.querySelectorAll('.toast'))
         var toastList = toastElList.map(function (toastEl) {
-            return new bootstrap.Toast(toastEl, { autohide: true, delay: 2500 }) 
+            return new bootstrap.Toast(toastEl, { autohide: true, delay: 2500 })
         })
 
         document.getElementById('copy-btn').addEventListener('click', function () {
-            var url = '{{ contenido.get_absolute_url }}';
+            var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
             navigator.clipboard.writeText(url).then(function () {
                 console.log('Enlace copiado al portapapeles');
                 toastList[0].show();
