@@ -4,10 +4,13 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth.decorators import login_required
 from django_cms.utils.storages import MediaRootS3Boto3Storage
 
 from .models import Categoria, Contenido
+
+
+
 
 
 class ContenidoView(View):
@@ -33,6 +36,39 @@ class ContenidoDetalleView(View):
         contenido = Contenido.objects.get(id=contenido_id)
         return render(request, "pages/contenido_detalle.html", {"contenido": contenido})
 
+
+# views.py
+
+class ContenidoFavoritosView(View):
+    def get(self, request):
+        termino = None
+        # Obtén los contenidos marcados como favoritos por el usuario actual
+        contenido_list = request.user.contenidos_favoritos.all()
+
+        # Ordena por fecha de creación descendente
+        contenido_list = contenido_list.order_by("-fechaCreacion")
+
+        # Continua con la paginación y renderiza la plantilla
+        paginator = Paginator(contenido_list, 4)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        return render(request, "pages/favoritos_resultados.html", {"page_obj": page_obj})
+
+@login_required
+def favorito(request, contenido_id):
+    contenido = Contenido.objects.get(id=contenido_id)
+    if request.user in contenido.favorito_por.all():
+        contenido.favorito_por.remove(request.user)
+    else:
+        contenido.favorito_por.add(request.user)
+    return JsonResponse({'favorito': request.user in contenido.favorito_por.all()})
+
+@login_required
+def es_favorito(request, contenido_id):
+    contenido = Contenido.objects.get(id=contenido_id)
+    es_favorito = request.user in contenido.favorito_por.all()
+    return JsonResponse({'favorito': es_favorito})
 
 class ContenidoBusquedaView(View):
     def get(self, request):
@@ -85,3 +121,4 @@ class SubirImagenView(View):
         name = storage.save(image.name, image)
         url = storage.url(name)
         return JsonResponse({"location": url})
+
