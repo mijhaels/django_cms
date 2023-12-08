@@ -5,6 +5,21 @@
 {% load rating_tags %}
 
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+
+
+<div class="toast align-items-center text-bg-light position-fixed top-0 start-50 translate-middle-x" role="alert"
+    aria-live="assertive" aria-atomic="true" style="z-index: 9999;">
+    <div class="d-flex">
+        <div class="toast-body">
+            Enlace copiado al portapapeles.
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+            aria-label="Close"></button>
+    </div>
+</div>
+
 <div class="container mt-5">
     <div class="col-md-8">
         <div class="card mb-3 bg-light ">
@@ -23,28 +38,29 @@
                         {% render_reaction_import %}
                         {% render_reaction request obj=contenido settings_slug='default-config' %}
                         {% render_reaction_script %}
-                        <div class="d-flex align-items-center ms-3">
+                        <div class="d-flex align-items-center ms-2 " style="font-size: 1.2rem;">
                           <button id="botonFavorito" onclick=" actualizarFavorito()" class=" text-black pl-2">
-                              {% if favorito %}
-                                  <i class="bi bi-bookmark-fill" style="font-size: 1.5rem;"></i>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-fill" viewBox="0 0 16 16" style="font-size: 1.5rem;">
-                                      <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2"/>
-                                  </svg>
-                              {% else %}
-                                  <i class="bi bi-bookmark" style="font-size: 1.5rem;"></i>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16" style="font-size: 1.5rem;">
-                                      <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>
-                                  </svg>
-                              {% endif %}
+                            {% if favorito %}
+                            <i class="bi bi-bookmark-fill bi-lg"></i>
+                            
+                        {% else %}
+                            <i class="bi bi-bookmark bi-lg"></i>
+                            
+                        {% endif %}
                           </button>
-                          <div class="btn-group dropend">
-                              <button type="button" class="btn btn-secondary bg-primary text-white dropdown-toggle border-0 ms-3" data-bs-toggle="dropdown" aria-expanded="false">
-                                  Compartir
-                              </button>
-                              <ul class="dropdown-menu">
-                                  <!-- Dropdown menu links -->
-                              </ul>
-                          </div>
+                          <div class="ms-auto">
+                            <div class="dropdown ms-2">
+                                <a href="#" class="text-dark" role="button" id="dropdownMenuLink"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-box-arrow-up" style="font-size: 1.5rem;"></i>
+                                </a>
+                                <ul class="dropdown-menu text-bg-light" aria-labelledby="dropdownMenuLink"
+                                    style="position: absolute; right: 0;">
+                                    <!-- Dropdown menu links -->
+                                    <li class="text-center "><button id="copy-btn">Copiar enlace</button></li>
+                                </ul>
+                            </div>
+                        </div>
                       </div>
                       
                     </div>
@@ -84,9 +100,9 @@
         
         const botonFavorito = document.getElementById('botonFavorito');
         if (favorito) {
-            botonFavorito.innerHTML = '<i class="bi bi-bookmark-fill bi-lg"></i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-fill bi-lg" viewBox="0 0 16 16"><path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2"/></svg>';
+            botonFavorito.innerHTML = '<i class="bi bi-bookmark-fill bi-lg"></i>';
         } else {
-            botonFavorito.innerHTML = '<i class="bi bi-bookmark bi-lg"></i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark bi-lg" viewBox="0 0 16 16"><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/></svg>';
+            botonFavorito.innerHTML = '<i class="bi bi-bookmark bi-lg"></i>';
         }
         
     }
@@ -121,6 +137,24 @@
             actualizarBotonFavorito(favorito);
         });
     }
-    
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl, { autohide: true, delay: 2500 })
+        })
+
+        document.getElementById('copy-btn').addEventListener('click', function () {
+            var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            navigator.clipboard.writeText(url).then(function () {
+                console.log('Enlace copiado al portapapeles');
+                toastList[0].show();
+            }, function () {
+                console.log('Error al copiar el enlace');
+                // Manejo del error aquí
+            });
+        });
+    });
+
 </script>
 {% endblock content %}

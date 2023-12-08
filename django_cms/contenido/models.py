@@ -7,6 +7,8 @@ from reaction.models import Reaction
 from simple_history.models import HistoricalRecords
 from tinymce.models import HTMLField
 from django.db.models import ManyToManyField
+
+
 from django_cms.users.models import User
 
 
