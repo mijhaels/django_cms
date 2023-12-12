@@ -6,29 +6,8 @@
 
 {% block content %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-        var toastList = toastElList.map(function (toastEl) {
-            return new bootstrap.Toast(toastEl, { autohide: true, delay: 2500 })
-        })
 
-        document.getElementById('copy-btn').addEventListener('click', function () {
-            var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            navigator.clipboard.writeText(url).then(function () {
-                console.log('Enlace copiado al portapapeles');
-                toastList[0].show();
-            }, function () {
-                console.log('Error al copiar el enlace');
-                // Manejo del error aquí
-            });
-        });
-    });
-
-</script>
 
 <div class="toast align-items-center text-bg-light position-fixed top-0 start-50 translate-middle-x" role="alert"
     aria-live="assertive" aria-atomic="true" style="z-index: 9999;">
@@ -55,12 +34,22 @@
                         <p>{{ contenido.autor }}</p>
                         <p>Publicado el {{ contenido.fechaCreacion }}</p>
                     </div>
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center ms-auto">
                         {% render_reaction_import %}
                         {% render_reaction request obj=contenido settings_slug='default-config' %}
                         {% render_reaction_script %}
-                        <div class="ms-auto">
-                            <div class="dropdown">
+                        <div class="d-flex align-items-center ms-2 " style="font-size: 1.2rem;">
+                          <button id="botonFavorito" onclick=" actualizarFavorito()" class=" text-black pl-2">
+                            {% if favorito %}
+                            <i class="bi bi-bookmark-fill bi-lg"></i>
+                            
+                        {% else %}
+                            <i class="bi bi-bookmark bi-lg"></i>
+                            
+                        {% endif %}
+                          </button>
+                          <div class="ms-auto">
+                            <div class="dropdown ms-2">
                                 <a href="#" class="text-dark" role="button" id="dropdownMenuLink"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-box-arrow-up" style="font-size: 1.5rem;"></i>
@@ -72,6 +61,8 @@
                                 </ul>
                             </div>
                         </div>
+                      </div>
+                      
                     </div>
                 </div>
             </div>
@@ -85,5 +76,85 @@
         <br />
         {% render_comments request obj=contenido settings_slug='default-config' %}
     </div>
+
 </div>
+<script>
+    window.onload = function() {
+        const contenidoId = window.location.pathname.split('/')[2];
+
+   // Recuperar el estado de 'favorito' de la base de datos al cargar la página
+    fetch(`/contenido/es_favorito/${contenidoId}/`, {
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest', //Necessary to work with request.is_ajax()
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        favorito = data.favorito;
+        actualizarBotonFavorito(favorito);
+    });
+    }
+
+    function actualizarBotonFavorito(favorito) {
+        
+        const botonFavorito = document.getElementById('botonFavorito');
+        if (favorito) {
+            botonFavorito.innerHTML = '<i class="bi bi-bookmark-fill bi-lg"></i>';
+        } else {
+            botonFavorito.innerHTML = '<i class="bi bi-bookmark bi-lg"></i>';
+        }
+        
+    }
+
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+    function actualizarFavorito() {
+        const contenidoId = window.location.pathname.split('/')[2];
+        const csrftoken =getCookie('csrftoken');
+        fetch(`/contenido/favorito/${contenidoId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,  // Necesitas obtener este token de alguna manera
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            favorito = data.favorito;
+            actualizarBotonFavorito(favorito);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl, { autohide: true, delay: 2500 })
+        })
+
+        document.getElementById('copy-btn').addEventListener('click', function () {
+            var url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            navigator.clipboard.writeText(url).then(function () {
+                console.log('Enlace copiado al portapapeles');
+                toastList[0].show();
+            }, function () {
+                console.log('Error al copiar el enlace');
+                // Manejo del error aquí
+            });
+        });
+    });
+
+</script>
 {% endblock content %}

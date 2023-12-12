@@ -6,7 +6,8 @@ from rating.models import Rating
 from reaction.models import Reaction
 from simple_history.models import HistoricalRecords
 from tinymce.models import HTMLField
-from django.urls import reverse
+from django.db.models import ManyToManyField
+
 
 from django_cms.users.models import User
 
@@ -52,10 +53,10 @@ class Contenido(models.Model):
     categoria = models.ForeignKey(
         "Categoria", on_delete=models.CASCADE, related_name="categoria"
     )  #: Categoría del contenido
+    favorito_por= ManyToManyField(User, related_name="contenidos_favoritos", blank=True)
 
     def __str__(self):
         return self.titulo
-
 
 class Categoria(models.Model):
     titulo = models.CharField(
