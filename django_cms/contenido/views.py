@@ -4,6 +4,16 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Count, Sum, F, ExpressionWrapper
+from django.utils import timezone
+from django.db.models.functions import Coalesce
+from rating.models import Rating
+from reaction.models import Reaction
+from comment.models import Comment
+from django.db.models import Prefetch
+from reaction.models import UserReaction
+from django.db.models import IntegerField
+from django.db.models.functions import Cast
 
 from django_cms.utils.storages import MediaRootS3Boto3Storage
 
@@ -12,21 +22,76 @@ from .models import Categoria, Contenido
 
 class ContenidoView(View):
     def get(self, request):
-        # Si el usuario inicio sesión, se obtienen los contenidos de acuerdo a si está publico o no
-        if request.user.is_authenticated:
-            contenido_list = Contenido.objects.filter(activo=True, estado=4).order_by("-fechaCreacion")
-        # Si el usuario no inicio sesión, se obtienen los contenidos publicos
-        else:
-            contenido_list = Contenido.objects.filter(activo=True, esPublico=True, estado=4).order_by("-fechaCreacion")
-        paginator = Paginator(contenido_list, 2)
+        # Get the current time
+        now = timezone.now()
 
-        page_number = request.GET.get("page")
+        # Subtract 60 days from the current time
+        hace_dos_meses = now - timezone.timedelta(days=60)
+
+        # Convert the datetime object to a string in the format that PostgreSQL understands
+        hace_dos_meses_str = hace_dos_meses.isoformat()
+
+        if request.user.is_authenticated:       
+            contenido_destacado = Contenido.objects.filter(
+                activo=True,
+                estado=4,
+                fechaCreacion__gte=hace_dos_meses,
+                reactions__isnull=False
+            ).annotate(
+                rating_multiplied=Cast(F('ratings__average') * F('ratings__count'), IntegerField()),
+                comment_count = Count('comments__object_id'),
+                reaction_count= Count('reactions__reactions__reaction')
+            ).prefetch_related(
+                'reactions__reactions__reaction'
+            ).annotate(
+                total_score = ExpressionWrapper(Coalesce(F('rating_multiplied'), 0), output_field=IntegerField()) + ExpressionWrapper(Coalesce(F('reaction_count'), 0), output_field=IntegerField()) + ExpressionWrapper(Coalesce(F('comment_count'), 0), output_field=IntegerField())
+            ).filter(
+                total_score__gte=3
+            ).order_by("-total_score", "-fechaCreacion")
+        else:
+            contenido_destacado = Contenido.objects.filter(
+                activo=True,
+                estado=4,
+                esPublico=True,
+                fechaCreacion__gte=hace_dos_meses,
+                reactions__isnull=False
+            ).annotate(
+                rating_multiplied=Cast(F('ratings__average') * F('ratings__count'), IntegerField()),
+                comment_count = Count('comments__object_id'),
+                reaction_count= Count('reactions__reactions__reaction')
+            ).prefetch_related(
+                'reactions__reactions__reaction'
+            ).annotate(
+                total_score = ExpressionWrapper(Coalesce(F('rating_multiplied'), 0), output_field=IntegerField()) + ExpressionWrapper(Coalesce(F('reaction_count'), 0), output_field=IntegerField()) + ExpressionWrapper(Coalesce(F('comment_count'), 0), output_field=IntegerField())
+            ).filter(
+                total_score__gte=3
+            ).order_by("-total_score", "-fechaCreacion")
+
+        if request.user.is_authenticated:
+            contenido_no_destacado = Contenido.objects.filter(
+                activo=True,
+                estado=4,
+            ).exclude(
+                id__in=contenido_destacado.values_list('id', flat=True)
+            ).order_by('-fechaCreacion')
+        else:
+            contenido_no_destacado = Contenido.objects.filter(
+                activo=True,
+                estado=4,
+                esPublico=True
+            ).exclude(
+                id__in=contenido_destacado.values_list('id', flat=True)
+            ).order_by('-fechaCreacion')
+
+        contenido_list = list(contenido_destacado) + list(contenido_no_destacado)
+
+        paginator = Paginator(contenido_list, 4)
+        page_number = request.GET.get("page", 1)
         page_obj = paginator.get_page(page_number)
 
         categorias = Categoria.objects.filter(activo=True)
 
         return render(request, "pages/inicio.html", {"page_obj": page_obj, "categorias": categorias})
-
 
 class ContenidoDetalleView(View):
     def get(self, request, contenido_id):
