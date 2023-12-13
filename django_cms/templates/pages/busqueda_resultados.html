@@ -6,7 +6,9 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-8 ">
-        <h3 class="text-secondary "><i class="bi bi-search" style="font-size: 1.5rem;"></i> Resultados de {{ termino }}</h3>
+        <h3 class="text-secondary ">
+          <i class="bi bi-search" style="font-size: 1.5rem;"></i> Resultados de {{ termino }}
+        </h3>
         <ul class="nav nav-pills my-3">
           <li class="nav-item">
             <a class="nav-link btn btn-primary"
@@ -67,15 +69,14 @@
           {% endfor %}
         {% else %}
           <div class="d-flex justify-content-center">
-            <div class="card mb-3" style="max-width: 540px; border: none;">
+            <div class="card mb-3 border-0" style="max-width: 540px">
               <div class="row g-0">
                 <div class="col-md-4 d-flex align-items-center justify-content-center">
                   <img src="{% static 'images/gatito_error.jpg' %}"
-                       class="img-fluid"
+                       class="img-fluid border-0"
                        alt="Gatito de busqueda"
                        style="max-width: 200px;
-                              height: auto;
-                              border: none" />
+                              height: auto" />
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">

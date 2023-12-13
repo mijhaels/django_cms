@@ -3,147 +3,163 @@
 <!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE }}">
-
-<head>
-  
-  <meta charset="utf-8" />
-  <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>
-    {% block title %}
-    contentflow
-    {% endblock title %}
-  </title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Sistema de Gestión de Contenidos" />
-  <meta name="author" content="Iván Cáceres Dahiana Dávalos Lucero Estigarribia Mijhael Samaniego" />
-  <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
-  {% block css %}
-  <!-- Latest compiled and minified Bootstrap CSS -->
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-  <!-- Your stuff: Third-party CSS libraries go here -->
-  <!-- This file stores project-specific CSS -->
-  <link rel="stylesheet" href="{% static 'css/estilo.css' %}" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-  {% endblock css %}
-  <!-- Le javascript
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>
+      {% block title %}
+        contentflow
+      {% endblock title %}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sistema de Gestión de Contenidos" />
+    <meta name="author"
+          content="Iván Cáceres Dahiana Dávalos Lucero Estigarribia Mijhael Samaniego" />
+    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+    {% block css %}
+      <!-- Latest compiled and minified Bootstrap CSS -->
+      <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+      <!-- Your stuff: Third-party CSS libraries go here -->
+      <!-- This file stores project-specific CSS -->
+      <link rel="stylesheet" href="{% static 'css/estilo.css' %}" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+            rel="stylesheet" />
+    {% endblock css %}
+    <!-- Le javascript
     ================================================== -->
-  {# Placed at the top of the document so pages load faster with defer #}
-  {% block javascript %}
-  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script>
-  <!-- Your stuff: Third-party javascript libraries go here -->
-  <!-- place project specific Javascript in this file -->
-  <script defer src="{% static 'js/project.js' %}"></script>
-  {% endblock javascript %}
-</head>
+    {# Placed at the top of the document so pages load faster with defer #}
+    {% block javascript %}
+      <script defer
+              src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+              integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+              crossorigin="anonymous"></script>
+      <!-- Your stuff: Third-party javascript libraries go here -->
+      <!-- place project specific Javascript in this file -->
+      <script defer src="{% static 'js/project.js' %}"></script>
+    {% endblock javascript %}
+  </head>
+  <body>
+    <div class="mb-1">
+      <nav class="navbar navbar-expand-md navbar-light bg-secondary">
+        <div class="container-fluid">
+          <button class="navbar-toggler navbar-toggler-right"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navbarSupportedContent"
+                  aria-controls="navbarSupportedContent"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand text-white" href="{% url 'inicio' %}"><i class="bi bi-transparency"></i> contentflow</a>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link text-white" href="{% url 'inicio' %}">Inicio <span class="visually-hidden">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'acerca' %}">Acerca de</a>
+              </li>
+              {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link text-white"
+                     href="{% url 'users:detail' request.user.username %}">Mi perfil</a>
+                </li>
+                <li>
+                  {% if request.user.is_authenticated %}
+                    <a class="nav-link text-white" href="{% url 'contenido:favoritos' %}">Mis favoritos</a>
+                  {% endif %}
+                </li>
+                <li class="nav-item">
+                  {# URL provided by django-allauth/account/urls.py #}
+                  <a class="nav-link text-white" href="{% url 'account_logout' %}">Cerrar sesión</a>
+                </li>
+              {% else %}
+                {% if ACCOUNT_ALLOW_REGISTRATION %}
+                  <li class="nav-item">
+                    {# URL provided by django-allauth/account/urls.py #}
+                    <a id="sign-up-link "
+                       class="nav-link text-white"
+                       href="{% url 'account_signup' %}">Registrarse</a>
+                  </li>
+                {% endif %}
+                <li class="nav-item">
+                  {# URL provided by django-allauth/account/urls.py #}
+                  <a id="log-in-link "
+                     class="nav-link text-white"
+                     href="{% url 'account_login' %}">Iniciar sesión</a>
+                </li>
+              {% endif %}
+            </ul>
+            <div class="d-flex align-items-center mx-auto">
+              <form class="navbar d-flex"
+                    role="search"
+                    action="{% url 'contenido:contenido_busqueda' %}"
+                    method="get">
+                <div>
+                  <input class="form-control me-2"
+                         type="search"
+                         width="100px"
+                         placeholder="Buscar"
+                         aria-label="Search"
+                         name="publicacion"
+                         id="search-input" />
+                </div>
+                <div class="ms-2">
+                  <button class="btn btn-outline-light w-100" type="submit">Buscar</button>
+                </div>
+              </form>
+            </div>
+            <script type="text/javascript">
+              document.addEventListener("DOMContentLoaded", function() {
+                // Obten el valor del campo de búsqueda del parámetro en la URL
+                var searchTerm = "";
 
-<body>
-  <div class="mb-1">
-    <nav class="navbar navbar-expand-md navbar-light bg-secondary">
-      <div class="container-fluid">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-          aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand text-white" href="{% url 'inicio' %}"><i class="bi bi-transparency"></i> contentflow</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link text-white" href="{% url 'inicio' %}">Inicio <span
-                  class="visually-hidden">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'acerca' %}">Acerca de</a>
-            </li>
-            {% if request.user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'users:detail' request.user.username %}">Mi perfil</a>
-            </li>
-            <li>
-            {% if request.user.is_authenticated %}
-            <a class="nav-link text-white" href="{% url 'contenido:favoritos' %}">Mis favoritos</a>
-            {% endif %}
-            </li>
-            <li class="nav-item">
-              {# URL provided by django-allauth/account/urls.py #}
-              <a class="nav-link text-white" href="{% url 'account_logout' %}">Cerrar sesión</a>
-            </li>
-            {% else %}
-            {% if ACCOUNT_ALLOW_REGISTRATION %}
-            <li class="nav-item">
-              {# URL provided by django-allauth/account/urls.py #}
-              <a id="sign-up-link " class="nav-link text-white" href="{% url 'account_signup' %}">Registrarse</a>
-            </li>
-            {% endif %}
-            <li class="nav-item">
-              {# URL provided by django-allauth/account/urls.py #}
-              <a id="log-in-link " class="nav-link text-white" href="{% url 'account_login' %}">Iniciar sesión</a>
-            </li>
-            {% endif %}
-            
+                // Comprueba el parámetro en la URL y establece el valor del campo de búsqueda según corresponda
+                if ("{{ request.GET.publicacion }}" !== "") {
+                  searchTerm = "{{ request.GET.publicacion }}";
+                } else if ("{{ request.GET.autor }}" !== "") {
+                  searchTerm = "{{ request.GET.autor }}";
+                } else if ("{{ request.GET.categoria }}" !== "") {
+                  searchTerm = "{{ request.GET.categoria }}";
+                }
 
-
-            
-          </ul>
-          <div class="d-flex align-items-center mx-auto">
-            <form class="navbar d-flex" role="search" action="{% url 'contenido:contenido_busqueda' %}" method="get">
-              <div>
-                <input class="form-control me-2" type="search" width="100px" placeholder="Buscar" aria-label="Search"
-                  name="publicacion" id="search-input" />
-              </div>
-              <div class="ms-2">
-                <button class="btn btn-outline-light w-100" type="submit">Buscar</button>
-              </div>
-            </form>
+                // Establece el valor del campo de búsqueda con el valor recuperado
+                var searchInput = document.getElementById("search-input");
+                if (searchInput) {
+                  searchInput.value = searchTerm;
+                }
+              });
+            </script>
+            {% if request.user.is_staff %}
+              <a id="admin-cms"
+                 class="nav-link btn btn-secondary text-white p-1 ms-auto "
+                 href="{% url 'admin:index' %}">Panel de Administración</a>
+            {% endif %}
           </div>
-          <script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function () {
-              // Obten el valor del campo de búsqueda del parámetro en la URL
-              var searchTerm = "";
-
-              // Comprueba el parámetro en la URL y establece el valor del campo de búsqueda según corresponda
-              if ("{{ request.GET.publicacion }}" !== "") {
-                searchTerm = "{{ request.GET.publicacion }}";
-              } else if ("{{ request.GET.autor }}" !== "") {
-                searchTerm = "{{ request.GET.autor }}";
-              } else if ("{{ request.GET.categoria }}" !== "") {
-                searchTerm = "{{ request.GET.categoria }}";
-              }
-
-              // Establece el valor del campo de búsqueda con el valor recuperado
-              var searchInput = document.getElementById("search-input");
-              if (searchInput) {
-                searchInput.value = searchTerm;
-              }
-            });
-          </script>
-          {% if request.user.is_staff %}
-          <a id="admin-cms" class="nav-link btn btn-secondary text-white p-1 ms-auto "
-            href="{% url 'admin:index' %}">Panel de Administración</a>
-          {% endif %}
         </div>
-      </div>
-    </nav>
-  </div>
-  <div class="container">
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-      {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </nav>
     </div>
-    {% endfor %}
-    {% endif %}
-    {% block content %}
-    {% endblock content %}
-  </div>
-  <!-- /container -->
-  {% block modal %}
-  {% endblock modal %}
-  {% block inline_javascript %}
-  {% comment %}
+    <div class="container">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      {% block content %}
+      {% endblock content %}
+    </div>
+    <!-- /container -->
+    {% block modal %}
+    {% endblock modal %}
+    {% block inline_javascript %}
+      {% comment %}
   Script tags with only code, no src (defer by default). To run
   with a "defer" so that you run inline code:
   <script>
@@ -151,8 +167,7 @@
       /* Run whatever you want */
     });
   </script>
-  {% endcomment %}
-  {% endblock inline_javascript %}
-</body>
-
+      {% endcomment %}
+    {% endblock inline_javascript %}
+  </body>
 </html>

@@ -7,7 +7,10 @@
     <div class="row">
       <div class="col-md-8">
         {% if page_obj.number == 1 %}
-        <h3 class="text-secondary "><i class="bi bi-stars"></i> Contenido destacado</h3> <br>
+          <h3 class="text-secondary ">
+            <i class="bi bi-stars"></i> Contenido destacado
+          </h3>
+          <br />
         {% endif %}
         {% if page_obj %}
           {% for contenido in page_obj %}
