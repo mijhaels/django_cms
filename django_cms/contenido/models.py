@@ -52,7 +52,9 @@ class Contenido(models.Model):
     categoria = models.ForeignKey(
         "Categoria", on_delete=models.CASCADE, related_name="categoria"
     )  #: Categoría del contenido
-    favorito_por = ManyToManyField(User, related_name="contenidos_favoritos", blank=True)
+    favorito_por = ManyToManyField(
+        User, related_name="contenidos_favoritos", blank=True
+    )  #: Usuarios que marcaron el contenido como favorito
 
     def __str__(self):
         return self.titulo

@@ -8,9 +8,11 @@ class User(AbstractUser):
     Usuario personalizado para contentflow.
     """
 
-    name = CharField("Nombre completo", blank=True, max_length=255)
-    sex = CharField("Sexo", blank=True, max_length=1, choices=(("M", "Masculino"), ("F", "Femenino"), ("O", "Otro")))
-    birth_date = DateField("Fecha de nacimiento", blank=True, null=True)
+    name = CharField("Nombre completo", blank=True, max_length=255)  #: Nombre completo del usuario
+    sex = CharField(
+        "Sexo", blank=True, max_length=1, choices=(("M", "Masculino"), ("F", "Femenino"), ("O", "Otro"))
+    )  #: Sexo del usuario
+    birth_date = DateField("Fecha de nacimiento", blank=True, null=True)  #: Fecha de nacimiento del usuario
 
     first_name = None  # type: ignore
     last_name = None  # type: ignore
