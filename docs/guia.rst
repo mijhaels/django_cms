@@ -75,7 +75,13 @@ Se utiliza para formatear todos los archivos .html
 
 Ejecución de comandos de restauración de base de datos:
 ----------------------------------------------------------------------
-A continuación se demuestran los comandos a ser utilizados para restaurar la base de datos
+A continuación se demuestran los comandos a ser utilizados para restaurar la base de datos.
+
+Tener en cuenta que el único contenedor que debe estar arriba es el de **postgres**.
+
+ .. code-block:: python
+
+   $ docker compose -f local.yml up -d postgres
 
 Para crear un backup, se ejecuta el siguiente comando
  .. code-block:: python
@@ -87,12 +93,25 @@ Para listar los backups existentes, se ejecuta el siguiente comando:
    
    $ docker compose -f local.yml exec postgres backups
 
-Para copiar backups de la base de datos localmente.
+Para copiar backups de un contenedor a un directorio local, se ejecuta el siguiente comando:
+ .. code-block:: python
+   
+   $ docker cp <container_id>:/backups <local_dir>
 
 Por ejemplo, dado 9c5c3f055843 es el ID del contenedor copiar todas las copias de seguridad a un directorio local, se ejecuta el siguiente comando:
  .. code-block:: python
    
    $ docker cp 9c5c3f055843:/backups ./backups
+
+Para copiar backups de un directorio local a un contenedor, se ejecuta el siguiente comando:
+ .. code-block:: python
+   
+   $ docker cp <local_dir> <container_id>:/backups
+
+Por ejemplo, dado 9c5c3f055843 es el ID del contenedor copiar todas las copias de seguridad a un directorio local, se ejecuta el siguiente comando:
+ .. code-block:: python
+      
+   $ docker cp ./backups 9c5c3f055843:/backups
 
 Para restaurar un backup existente, se ejecuta el siguiente comando:
  .. code-block:: python
@@ -101,7 +120,7 @@ Para restaurar un backup existente, se ejecuta el siguiente comando:
 
 Ejecución de comandos de pruebas unitarias:
 ----------------------------------------------------------------------
-A continuación se demuestran los comandos a ser utilizados para las pruebas unitarias
+A continuación se demuestran los comandos a ser utilizados para las pruebas unitarias.
 
 Para ejecutar las pruebas unitarias, se ejecuta el siguiente comando:
  .. code-block:: python
