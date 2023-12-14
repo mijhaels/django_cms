@@ -231,6 +231,9 @@ class ContenidoAdmin(SimpleHistoryAdmin):
             extra_context["show_button_publicar"] = True
             extra_context["show_button_rechazar"] = True
 
+        if "Publicador" in user_groups and contenido.estado == 4:
+            extra_context["show_button_rechazar"] = True
+
         if "Autor" in user_groups and contenido.estado == 5:
             extra_context["show_button_borrador"] = True
 
