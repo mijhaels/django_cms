@@ -113,6 +113,17 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 "categoria",
             )
 
+        if obj.estado == 4 and "Publicador" in groups:
+            readonly_fields += (
+                "titulo",
+                "resumen",
+                "contenido",
+                "fechaVencimiento",
+                "esPublico",
+                "activo",
+                "categoria",
+            )
+
         if obj.estado == 5 and ("Autor" or "Editor" in groups):
             readonly_fields += (
                 "titulo",
@@ -122,7 +133,6 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 "esPublico",
                 "activo",
                 "categoria",
-                "change_reason",
             )
         url_actual = request.resolver_match.url_name
         tieneHistorial = getattr(obj, "_history", None)
@@ -145,6 +155,8 @@ class ContenidoAdmin(SimpleHistoryAdmin):
             return True
         if obj.estado == 3 and "Publicador" in groups:
             return True
+        if obj.estado == 4 and "Publicador" in groups:
+            return True
         if obj.estado == 5 and "Autor" in groups:
             return True
         if obj.estado == 5 and "Editor" in groups:
@@ -166,27 +178,9 @@ class ContenidoAdmin(SimpleHistoryAdmin):
             and estado_obj_historial in {1, 2}
             and url_actual == "contenido_contenido_simple_history"
         ):
-            fecha_modificacion_historial = obj._history.history_date
-            fecha_modificacion_borradores = Contenido.historial.filter(
-                titulo=obj.titulo, estado=1, autor=obj.autor
-            ).order_by("-history_date")
-            fecha_modificacion_ultimo_borrador = (
-                fecha_modificacion_borradores[1].history_date
-                if estado_obj_actual == 1
-                else fecha_modificacion_borradores[0].history_date
-            )
-
-            if (
-                fecha_modificacion_historial > fecha_modificacion_ultimo_borrador
-                and estado_obj_historial == 1
-                and "Autor" in roles
-            ):
+            if estado_obj_historial == 1 and "Autor" in roles:
                 return False
-            elif (
-                fecha_modificacion_historial > fecha_modificacion_ultimo_borrador
-                and estado_obj_historial == 2
-                and "Editor" in roles
-            ):
+            elif estado_obj_historial == 2 and "Editor" in roles:
                 return False
 
         return True
@@ -229,6 +223,9 @@ class ContenidoAdmin(SimpleHistoryAdmin):
 
         if "Publicador" in user_groups and contenido.estado == 3:
             extra_context["show_button_publicar"] = True
+            extra_context["show_button_rechazar"] = True
+
+        if "Publicador" in user_groups and contenido.estado == 4:
             extra_context["show_button_rechazar"] = True
 
         if "Autor" in user_groups and contenido.estado == 5:

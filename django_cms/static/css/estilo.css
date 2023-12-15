@@ -3,3 +3,14 @@
     background-color: #8dbad0;
     border-color: #86b6ce;
 }
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.toast {
+    position: fixed;
+    top: 50px;
+    right: 0;
+    margin: 15px;
+}

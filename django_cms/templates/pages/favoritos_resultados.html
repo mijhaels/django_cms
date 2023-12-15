@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8">
+        <h3 class="text-secondary">
+          <i class="bi bi-bookmarks-fill"></i> Mis contenidos favoritos
+        </h3>
+        <br />
+        {% if page_obj %}
+          {% for contenido in page_obj %}
+            <a class="link-light"
+               href="{% url 'contenido:contenido_detalle' contenido.id %}">
+              <div class="card mb-3 bg-light text-dark">
+                <div class="row g-0">
+                  <div class="card-header text-center card-link">{{ contenido.titulo }}</div>
+                </div>
+                <div class="card-body text-dark">
+                  <p>{{ contenido.resumen }}</p>
+                </div>
+                <div class="card-footer text-body-secondary bg-light text-end">
+                  <p>
+                    <a href="{% url 'contenido:contenido_busqueda' %}?categoria={{ contenido.categoria.titulo }}">{{ contenido.categoria.titulo }}</a>
+                  </p>
+                  <p>
+                    <a href="{% url 'contenido:contenido_busqueda' %}?autor={{ contenido.autor.username }}">{{ contenido.autor.username }}</a>
+                  </p>
+                  <p>Publicado el {{ contenido.fechaCreacion }}</p>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        {% else %}
+          <div class="d-flex justify-content-center">
+            <div class="card mb-3" style="max-width: 540px; border: none;">
+              <div class="row g-0">
+                <div class="col-md-4 d-flex align-items-center justify-content-center">
+                  <img src="{% static 'images/gatito_error.jpg' %}"
+                       class="img-fluid"
+                       alt="Gatito de busqueda"
+                       style="max-width: 200px;
+                              height: auto;
+                              border: none" />
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <br />
+                    <br />
+                    <h5 class="card-title text-center pr-5">No hay resultados en tus favoritos.</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link"
+             href="?page={{ page_obj.previous_page_number }}"
+             tabindex="-1">Anterior</a>
+        </li>
+      {% endif %}
+      {% for i in page_obj.paginator.page_range %}
+        <li class="page-item{% if page_obj.number == i %} active{% endif %}">
+          <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+        </li>
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endblock content %}

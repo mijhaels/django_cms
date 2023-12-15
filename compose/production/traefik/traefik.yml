@@ -37,6 +37,11 @@ http:
       tls:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
+    web-router:
+      rule: 'Host(`contentflow.click`) || Host(`www.contentflow.click`)'
+      entryPoints:
+        - web
+      service: django
 
   middlewares:
     csrf:
