@@ -113,6 +113,17 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 "categoria",
             )
 
+        if obj.estado == 4 and "Publicador" in groups:
+            readonly_fields += (
+                "titulo",
+                "resumen",
+                "contenido",
+                "fechaVencimiento",
+                "esPublico",
+                "activo",
+                "categoria",
+            )
+
         if obj.estado == 5 and ("Autor" or "Editor" in groups):
             readonly_fields += (
                 "titulo",
@@ -122,7 +133,6 @@ class ContenidoAdmin(SimpleHistoryAdmin):
                 "esPublico",
                 "activo",
                 "categoria",
-                "change_reason",
             )
         url_actual = request.resolver_match.url_name
         tieneHistorial = getattr(obj, "_history", None)
@@ -144,6 +154,8 @@ class ContenidoAdmin(SimpleHistoryAdmin):
         if obj.estado == 2 and "Editor" in groups:
             return True
         if obj.estado == 3 and "Publicador" in groups:
+            return True
+        if obj.estado == 4 and "Publicador" in groups:
             return True
         if obj.estado == 5 and "Autor" in groups:
             return True
